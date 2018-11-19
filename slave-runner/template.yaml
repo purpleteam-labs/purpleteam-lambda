@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Starts the test slaves.
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: nodejs8.10
+
+Resources:
+
+    runSlavesFunction:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: .
+            Handler: index.runSlaves
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    PARAM1: VALUE
+
+Outputs:
+
+  runSlavesFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt runSlavesFunction.Arn
+
+  runSlavesFunctionIamRole:
+    Description: "Implicit IAM Role created for runSlaves function"
+    Value: !GetAtt runSlavesFunctionRole.Arn
