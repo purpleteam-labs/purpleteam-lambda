@@ -1,19 +1,16 @@
 {
-  "name": "hello_world",
-  "version": "1.0.0",
-  "description": "hello world sample for NodeJS",
+  "name": "app-slave-provisioner",
+  "version": "0.0.0",
+  "description": "purpleteam app-slave provisioner",
   "main": "src/index.js",
   "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
-  "author": "SAM CLI",
-  "license": "MIT",
+  "author": "binarymist",
+  "license": "",
   "dependencies": {
     "axios": "^0.18.0"
   },
   "scripts": {
-    "test": "mocha tests/unit/"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.1.1"
   }
 }
