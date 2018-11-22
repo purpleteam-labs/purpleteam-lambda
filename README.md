@@ -17,8 +17,8 @@
    <img src="https://gitlab.com/purpleteam-labs/purpleteam-lambda/badges/master/coverage.svg" alt="test coverage">
 </a>
 
-<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json" title="known vulnerabilities">
-  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=package.json" alt="known vulnerabilities"/>
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=app-slave-provisioner/package.json" title="known vulnerabilities">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=app-slave-provisioner/package.json" alt="known vulnerabilities"/>
 </a>
 
 <br/><br/><br/>
