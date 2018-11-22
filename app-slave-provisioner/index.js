@@ -3,6 +3,8 @@ const axios = require('axios')
 const url = 'http://checkip.amazonaws.com/';
 let response;
 
+const { spawn } = require('child_process');
+
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -37,24 +39,53 @@ let response;
  * @returns {Object} object.body - JSON Payload to be returned
  * 
  */
-exports.runSlaves = async (event, context) => {
-  console.log('The following is the event argument:');
-  console.log(event);
-  console.log('The following is the context argument:');
-  console.log(context);
-    try {
-        const ret = await axios(url);
-        response = {
-            'statusCode': 200,
-            'body': JSON.stringify({
-                message: 'hello world',
-                location: ret.data.trim()
-            })
-        }
-    } catch (err) {
-        console.log(err);
-        return err;
-    }
 
-    return response
+const deployLocalSlaves = async (instances) => {
+  // try {
+  //   const dockerCompose = spawn(
+  //     'docker-compose',
+  //     ['-f', '../../purpleteam-app-slave/docker-compose.yml', '--scale', `zap=${instances}`],
+  //     {detatched: true, stdio: 'ignore'}
+  //   );
+  // } catch (e) {
+  //   debugger;
+  // }
+  // dockerCompose.unref();
+
+  //curl -X POST http://localhost:5000/api/v1/projects --data '{"id":"hello-node"}' -H'Content-type: application/json'
+
+  const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
+
+  //await http.post('/projects', {id: 'app-slave'})
+  await http.put('/services', {service: 'zap', project: 'app-slave', num: instances})
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+};
+
+const deployCloudSlaves = () => {};
+
+exports.runSlaves = async (event, context) => {
+  let isLocal = true;
+  if (isLocal) await deployLocalSlaves(event.instances);
+  try {
+    const ret = await axios(url);
+    response = {
+      'statusCode': 200,
+      'body': JSON.stringify({
+        message: 'hello world',
+        location: ret.data.trim()
+      })
+    }
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+
+  return response
 };
