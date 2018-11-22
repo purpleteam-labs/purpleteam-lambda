@@ -3,8 +3,6 @@ const axios = require('axios')
 const url = 'http://checkip.amazonaws.com/';
 let response;
 
-const { spawn } = require('child_process');
-
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -41,18 +39,6 @@ const { spawn } = require('child_process');
  */
 
 const deployLocalSlaves = async (instances) => {
-  // try {
-  //   const dockerCompose = spawn(
-  //     'docker-compose',
-  //     ['-f', '../../purpleteam-app-slave/docker-compose.yml', '--scale', `zap=${instances}`],
-  //     {detatched: true, stdio: 'ignore'}
-  //   );
-  // } catch (e) {
-  //   debugger;
-  // }
-  // dockerCompose.unref();
-
-  //curl -X POST http://localhost:5000/api/v1/projects --data '{"id":"hello-node"}' -H'Content-type: application/json'
 
   const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
 
