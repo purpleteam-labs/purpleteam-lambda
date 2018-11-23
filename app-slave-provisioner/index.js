@@ -1,7 +1,6 @@
 
-const axios = require('axios')
-const url = 'http://checkip.amazonaws.com/';
-let response;
+const axios = require('axios');
+
 
 /**
  *
@@ -40,38 +39,43 @@ let response;
 
 const deployLocalSlaves = async (instances) => {
 
+  if (instances < 1 || instances > 12) throw new Error(`The number of app-slaves requested was: ${instances}. The supported number of instances is from 1-12`);
+
   const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
 
-  //await http.post('/projects', {id: 'app-slave'})
+  let containers;
+  let appSlaveServiceNames;
+
   await http.put('/services', {service: 'zap', project: 'app-slave', num: instances})
-  .then(function (response) {
+  .then(async function (response) {
     console.log(response);
+    if (response.status === 200) {
+      containers = await http.get('/projects/app-slave');
+      appSlaveServiceNames = containers.data.containers.map(c => c.name_without_project);
+    }
   })
   .catch(function (error) {
     console.log(error);
+    return error;
   });
 
-
+  return appSlaveServiceNames;
 };
 
 const deployCloudSlaves = () => {};
 
 exports.provisionAppSlaves = async (event, context) => {
   let isLocal = true;
-  if (isLocal) await deployLocalSlaves(event.instances);
-  try {
-    const ret = await axios(url);
-    response = {
-      'statusCode': 200,
-      'body': JSON.stringify({
-        message: 'hello world',
-        location: ret.data.trim()
-      })
-    }
-  } catch (err) {
-    console.log(err);
-    return err;
+  let result;
+  if (isLocal) result = await deployLocalSlaves(event.instances);
+
+  response = {
+    'statusCode': 200,
+    'body': JSON.stringify({
+      appSlaveServiceNames: result
+    })
   }
+
 
   return response
 };
