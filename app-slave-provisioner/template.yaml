@@ -10,21 +10,21 @@ Globals:
 
 Resources:
 
-    runSlavesFunction:
+    provisionAppSlaves:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
             CodeUri: .
-            Handler: index.runSlaves
+            Handler: index.provisionAppSlaves
             Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
                 Variables:
                     PARAM1: VALUE
 
 Outputs:
 
-  runSlavesFunction:
+  provisionAppSlaves:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt runSlavesFunction.Arn
+    Value: !GetAtt provisionAppSlaves.Arn
 
-  runSlavesFunctionIamRole:
-    Description: "Implicit IAM Role created for runSlaves function"
-    Value: !GetAtt runSlavesFunctionRole.Arn
+  provisionAppSlavesIamRole:
+    Description: "Implicit IAM Role created for provisionAppSlaves function"
+    Value: !GetAtt provisionAppSlavesRole.Arn

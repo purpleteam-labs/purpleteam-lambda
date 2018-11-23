@@ -56,7 +56,7 @@ const deployLocalSlaves = async (instances) => {
 
 const deployCloudSlaves = () => {};
 
-exports.runSlaves = async (event, context) => {
+exports.provisionAppSlaves = async (event, context) => {
   let isLocal = true;
   if (isLocal) await deployLocalSlaves(event.instances);
   try {
