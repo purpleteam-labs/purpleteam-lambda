@@ -7,10 +7,9 @@
   "author": "binarymist",
   "license": "",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "convict": "^4.4.0"
   },
-  "scripts": {
-  },
-  "devDependencies": {
-  }
+  "scripts": {},
+  "devDependencies": {}
 }
