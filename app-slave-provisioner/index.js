@@ -65,6 +65,7 @@ internals.developmentDeploySlaves = async (instances) => {
 
 internals.productionDeploySlaves = () => {
   throw new Error('Not Implemented');
+  // Todo: KC: Deploy ECS Task
 };
 
 exports.provisionAppSlaves = async (event, context) => {
