@@ -1,6 +1,7 @@
 
 const axios = require('axios');
-
+const config = require('./config/config.js');
+const internals = {};
 
 /**
  *
@@ -37,7 +38,7 @@ const axios = require('axios');
  * 
  */
 
-const deployLocalSlaves = async (instances) => {
+internals.developmentDeploySlaves = async (instances) => {
 
   if (instances < 1 || instances > 12) throw new Error(`The number of app-slaves requested was: ${instances}. The supported number of instances is from 1-12`);
 
@@ -62,12 +63,13 @@ const deployLocalSlaves = async (instances) => {
   return appSlaveServiceNames;
 };
 
-const deployCloudSlaves = () => {};
+internals.productionDeploySlaves = () => {
+  throw new Error('Not Implemented');
+};
 
 exports.provisionAppSlaves = async (event, context) => {
-  let isLocal = true;
-  let result;
-  if (isLocal) result = await deployLocalSlaves(event.instances);
+  const env = config.get('env');  
+  const result = await internals[`${env}DeploySlaves`](event.instances);
 
   response = {
     //'statusCode': 200,

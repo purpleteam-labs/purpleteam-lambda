@@ -7,6 +7,9 @@ Globals:
   Function:
     Timeout: 3
     Runtime: nodejs8.10
+    Environment:
+      Variables: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+          NODE_ENV: development
 
 Resources:
 
@@ -15,9 +18,6 @@ Resources:
         Properties:
             CodeUri: ./app-slave-provisioner
             Handler: index.provisionAppSlaves
-            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-                Variables:
-                    PARAM1: VALUE
 
 Outputs:
 
