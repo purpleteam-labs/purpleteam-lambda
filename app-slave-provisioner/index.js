@@ -70,12 +70,9 @@ exports.provisionAppSlaves = async (event, context) => {
   if (isLocal) result = await deployLocalSlaves(event.instances);
 
   response = {
-    'statusCode': 200,
-    'body': JSON.stringify({
-      appSlaveServiceNames: result
-    })
-  }
-
+    //'statusCode': 200,
+    body: { appSlaveServiceNames: result }
+  };
 
   return response
 };
