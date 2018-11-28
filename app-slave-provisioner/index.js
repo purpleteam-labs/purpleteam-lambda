@@ -40,7 +40,7 @@ const internals = {};
 
 internals.developmentDeploySlaves = async (instances) => {
 
-  if (instances < 1 || instances > 12) throw new Error(`The number of app-slaves requested was: ${instances}. The supported number of instances is from 1-12`);
+  if (instances < 1 || instances > 12) throw new Error(`The number of app-slaves requested was: ${instances}. The supported number of testSessions is from 1-12`);
 
   const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
 
@@ -69,6 +69,7 @@ internals.productionDeploySlaves = () => {
 };
 
 exports.provisionAppSlaves = async (event, context) => {
+  // Todo: KC: Do we need convict?
   const env = config.get('env');  
   const result = await internals[`${env}DeploySlaves`](event.instances);
 
