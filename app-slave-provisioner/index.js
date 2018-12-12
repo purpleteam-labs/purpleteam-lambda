@@ -52,7 +52,7 @@ internals.developmentDeploySlaves = async (instances) => {
     console.log(response);
     if (response.status === 200) {
       containers = await http.get('/projects/app-slave');
-      appSlaveServiceNames = containers.data.containers.map(c => c.name_without_project);
+      appSlaveServiceNames = containers.data.containers.map(c => c.name);
     }
   })
   .catch(function (error) {
