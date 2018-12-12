@@ -19,11 +19,11 @@ Resources:
             CodeUri: ./app-slave-provisioner
             Handler: index.provisionAppSlaves
 
-    provisionSeleniumHubNodes:
+    provisionSeleniumStandalones:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: ./selenium-hub-nodes-provisioner
-            Handler: index.provisionSeleniumHubNodes
+            CodeUri: ./selenium-standalone-provisioner
+            Handler: index.provisionSeleniumStandalones
 
 Outputs:
 
