@@ -5,7 +5,7 @@ config.*.json
 
 .env
 out.txt
-.vscode/
+
 
 # packages #
 ############
