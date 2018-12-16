@@ -1,7 +1,7 @@
 {
   "name": "selenium-hub-nodes-provisioner",
   "version": "0.0.0",
-  "description": "purpleteam selenium hub and nodes provisioner",
+  "description": "purpleteam selenium standalone provisioner",
   "main": "src/index.js",
   "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
@@ -10,15 +10,10 @@
     "axios": "^0.18.0"
   },
   "scripts": {
-    "lint": "eslint .",
     "deps": "npm-check",
     "update:deps": "npm-check -u"
   },
   "devDependencies": {
-    "eslint": "^5.10.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "npm-check": "^5.9.0",
-    "pre-commit": "^1.2.2"
+    "npm-check": "^5.9.0"
   }
 }
