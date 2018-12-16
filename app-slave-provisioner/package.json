@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "purpleteam app-slave provisioner",
   "main": "src/index.js",
-  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
+  "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
   "license": "",
   "dependencies": {
@@ -11,19 +11,10 @@
     "convict": "^4.4.0"
   },
   "scripts": {
-    "lint": "eslint .",
     "deps": "npm-check",
     "update:deps": "npm-check -u"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "devDependencies": {
-    "eslint": "^5.10.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "npm-check": "^5.9.0",
-    "pre-commit": "^1.2.2"
+    "npm-check": "^5.9.0"
   }
 }
-
