@@ -10,6 +10,14 @@
     "axios": "^0.18.0",
     "convict": "^4.4.0"
   },
-  "scripts": {},
-  "devDependencies": {}
+  "scripts": {
+    
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "npm-check": "^5.9.0",
+    "pre-commit": "^1.2.2"
+  }
 }
