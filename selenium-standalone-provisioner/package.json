@@ -10,7 +10,9 @@
     "axios": "^0.18.0"
   },
   "scripts": {
-    
+    "lint": "eslint .",
+    "deps": "npm-check",
+    "update:deps": "npm-check -u"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
