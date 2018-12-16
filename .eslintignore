@@ -1,0 +1,5 @@
+.gitignore
+.git/
+app-slave-provisioner/node_modules/
+selenium-standalone-provisioner/node_modules/
+sam-app/

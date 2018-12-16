@@ -1,0 +1,23 @@
+{
+  "name": "purpleteam-lambda",
+  "version": "0.0.0",
+  "description": "purpleteam lambda functions",
+  "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
+  "author": "binarymist",
+  "license": "",
+  "dependencies": {},
+  "scripts": {
+    "lint": "eslint .",
+    "deps": "echo Checking top level packages ...; npm-check; echo Checking ./app-slave-provisioner ...; npm-check ./app-slave-provisioner; echo Checking ./selenium-standalone-provisioner ...; npm-check ./selenium-standalone-provisioner"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "npm-check": "^5.9.0",
+    "pre-commit": "^1.2.2"
+  }
+}
