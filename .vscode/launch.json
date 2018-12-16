@@ -17,7 +17,7 @@
       "protocol": "inspector",
       "stopOnEntry": false
     }, {
-      "name": "selenium-hub-nodes-provisioner",
+      "name": "selenium-standalone-provisioner",
       "type": "node",
       "request": "attach",
       "address": "localhost",
