@@ -15,6 +15,9 @@
     "deps": "npm-check",
     "update:deps": "npm-check -u"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "devDependencies": {
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
