@@ -1,6 +1,6 @@
-
 const axios = require('axios');
 const config = require('./config/config.js');
+
 const internals = {};
 
 /**
@@ -35,14 +35,14 @@ const internals = {};
  * @returns {string} object.statusCode - HTTP Status Code to be returned to the client
  * @returns {Object} object.headers - HTTP Headers to be returned
  * @returns {Object} object.body - JSON Payload to be returned
- * 
+ *
  */
 
 internals.developmentDeploySlaves = async (dTOItems) => {
   const numberOfRequestedSlaves = dTOItems.length;
   if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of testSessions is from 1-12`);
 
-  const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
+  const http = axios.create({ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
   await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
 
@@ -58,16 +58,16 @@ internals.productionDeploySlaves = () => {
   // Todo: KC: Deploy ECS Task
 };
 
-exports.provisionAppSlaves = async (event, context) => {
+exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
   // Todo: KC: Do we need convict?
   const env = config.get('env');
   const { provisionViaLambdaDto: { items } } = event;
   const result = await internals[`${env}DeploySlaves`](items);
 
-  response = {
-    //'statusCode': 200,
+  const response = {
+    // 'statusCode': 200,
     body: { provisionViaLambdaDto: { items: result } }
   };
 
-  return response
+  return response;
 };
