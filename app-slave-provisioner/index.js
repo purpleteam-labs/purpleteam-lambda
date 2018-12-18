@@ -38,29 +38,19 @@ const internals = {};
  * 
  */
 
-internals.developmentDeploySlaves = async (instances) => {
-
-  if (instances < 1 || instances > 12) throw new Error(`The number of app-slaves requested was: ${instances}. The supported number of testSessions is from 1-12`);
+internals.developmentDeploySlaves = async (dTOItems) => {
+  const numberOfRequestedSlaves = dTOItems.length;
+  if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of testSessions is from 1-12`);
 
   const http = axios.create({baseURL: 'http://docker-compose-ui:5000/api/v1', headers: {'Content-type': 'application/json'}});
 
-  let containers;
-  let appSlaveServiceNames;
+  await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
 
-  await http.put('/services', {service: 'zap', project: 'app-slave', num: instances})
-  .then(async function (response) {
-    console.log(response);
-    if (response.status === 200) {
-      containers = await http.get('/projects/app-slave');
-      appSlaveServiceNames = containers.data.containers.map(c => c.name);
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-    return error;
+  return dTOItems.map((cV, i) => {
+    const itemClone = { ...cV };
+    itemClone.appSlaveContainerName = `appslave_zap_${i + 1}`;
+    return itemClone;
   });
-
-  return appSlaveServiceNames;
 };
 
 internals.productionDeploySlaves = () => {
@@ -70,12 +60,13 @@ internals.productionDeploySlaves = () => {
 
 exports.provisionAppSlaves = async (event, context) => {
   // Todo: KC: Do we need convict?
-  const env = config.get('env');  
-  const result = await internals[`${env}DeploySlaves`](event.instances);
+  const env = config.get('env');
+  const { provisionViaLambdaDto: { items } } = event;
+  const result = await internals[`${env}DeploySlaves`](items);
 
   response = {
     //'statusCode': 200,
-    body: { appSlaveServiceNames: result }
+    body: { provisionViaLambdaDto: { items: result } }
   };
 
   return response
