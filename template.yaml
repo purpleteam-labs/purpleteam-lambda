@@ -5,6 +5,7 @@ Description: Starts the test slaves.
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
+    # Todo: Can we take timeout value from config?
     Timeout: 3
     Runtime: nodejs8.10
     Environment:
