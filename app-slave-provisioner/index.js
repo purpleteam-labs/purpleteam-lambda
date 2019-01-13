@@ -47,7 +47,11 @@ internals.developmentDeploySlaves = async (dTOItems) => {
 
   const http = axios.create({ timeout /* default is 0 (no timeout) */, baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
-  await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
+  await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves })
+    .catch((e) => {
+      if (e.message === `timeout of ${timeout}ms exceeded`) throw new Error('timeout exceeded');
+      throw e;
+    });
 
   return dTOItems.map((cV, i) => {
     const itemClone = { ...cV };
@@ -66,7 +70,12 @@ exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line 
   const env = config.get('env');
   internals.lambdaTimeout = config.get('lambdaTimeout');
   const { provisionViaLambdaDto: { items } } = event;
-  const result = await internals[`${env}DeploySlaves`](items);
+  let result;
+  try {
+    result = await internals[`${env}DeploySlaves`](items);
+  } catch (e) {
+    if (e.message === 'timeout exceeded') result = 'Timeout exceeded: App Slave container(s) took too long to start.';
+  }
 
   const response = {
     // 'statusCode': 200,
