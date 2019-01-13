@@ -3,6 +3,8 @@ const config = require('./config/config.js');
 
 const internals = {};
 
+internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
+
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -40,9 +42,10 @@ const internals = {};
 
 internals.developmentDeploySlaves = async (dTOItems) => {
   const numberOfRequestedSlaves = dTOItems.length;
+  const timeout = internals.internalTimeout();
   if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of testSessions is from 1-12`);
 
-  const http = axios.create({ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
+  const http = axios.create({ timeout /* default is 0 (no timeout) */, baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
   await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
 
@@ -61,6 +64,7 @@ internals.productionDeploySlaves = () => {
 exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
   // Todo: KC: Do we need convict?
   const env = config.get('env');
+  internals.lambdaTimeout = config.get('lambdaTimeout');
   const { provisionViaLambdaDto: { items } } = event;
   const result = await internals[`${env}DeploySlaves`](items);
 

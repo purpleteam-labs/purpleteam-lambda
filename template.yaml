@@ -5,26 +5,26 @@ Description: Starts the test slaves.
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    # Todo: Can we take timeout value from config?
-    Timeout: 3
+    Timeout: !Ref LAMBDA_TIMEOUT # Default is 3 seconds
     Runtime: nodejs8.10
     Environment:
       Variables: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-          NODE_ENV: development
+        NODE_ENV: development
+        LAMBDA_TIMEOUT: 3 # Set the env var here, then ref it in code and subtract a little for internal timeout. Could also reference the env var from convict file.
 
 Resources:
 
-    provisionAppSlaves:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-        Properties:
-            CodeUri: ./app-slave-provisioner
-            Handler: index.provisionAppSlaves
+  provisionAppSlaves:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./app-slave-provisioner
+      Handler: index.provisionAppSlaves
 
-    provisionSeleniumStandalones:
-        Type: AWS::Serverless::Function
-        Properties:
-            CodeUri: ./selenium-standalone-provisioner
-            Handler: index.provisionSeleniumStandalones
+  provisionSeleniumStandalones:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./selenium-standalone-provisioner
+      Handler: index.provisionSeleniumStandalones
 
 Outputs:
 

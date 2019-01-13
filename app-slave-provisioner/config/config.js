@@ -6,6 +6,12 @@ const schema = {
     format: ['production', 'development', 'test'],
     default: 'production',
     env: 'NODE_ENV'
+  },
+  lambdaTimeout: {
+    doc: 'The timeout of the Lambda function',
+    format: 'duration',
+    default: 3,
+    env: 'LAMBDA_TIMEOUT'
   }
 };
 

@@ -2,9 +2,10 @@ const axios = require('axios');
 
 const internals = {};
 
+internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
+
 internals.developmentDeploySeleniumStandalones = async (dTOItems) => {
-  // Todo: Put timeout in config
-  const timeout = 3000;
+  const timeout = internals.internalTimeout();
   const numberOfRequestedStandalones = dTOItems.length;
   if (numberOfRequestedStandalones < 1 || numberOfRequestedStandalones > 12) throw new Error(`The number of selenium nodes requested was: ${numberOfRequestedStandalones}. The supported number of testSessions is from 1-12`);
 
@@ -42,6 +43,7 @@ internals.productionDeploySeleniumStandalones = async () => {
 
 exports.provisionSeleniumStandalones = async (event, context) => { // eslint-disable-line no-unused-vars
   const env = process.env.NODE_ENV;
+  internals.lambdaTimeout = process.env.LAMBDA_TIMEOUT;
   const { provisionViaLambdaDto: { items } } = event;
   let result;
   try {
