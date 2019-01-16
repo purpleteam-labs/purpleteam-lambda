@@ -26,12 +26,34 @@ Resources:
       CodeUri: ./selenium-standalone-provisioner
       Handler: index.provisionSeleniumStandalones
 
+  deprovisionS2Containers:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./s2-deprovisioner
+      Handler: index.deprovisionS2Containers
+
 Outputs:
 
   provisionAppSlaves:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Provision App Slaves Lambda Function ARN"
     Value: !GetAtt provisionAppSlaves.Arn
 
   provisionAppSlavesIamRole:
-    Description: "Implicit IAM Role created for provisionAppSlaves function"
+    Description: "Implicit IAM Role created for Provision App Slaves function"
     Value: !GetAtt provisionAppSlavesRole.Arn
+
+  provisionSeleniumStandalones:
+    Description: "Provision Selenium Standalones Lambda Function ARN"
+    Value: !GetAtt provisionSeleniumStandalones.Arn
+
+  provisionSeleniumStandalonesIamRole:
+    Description: "Implicit IAM Role created for Provision Selenium Standalones function"
+    Value: !GetAtt provisionSeleniumStandalonesRole.Arn
+
+  deprovisionS2Containers:
+    Description: "Deprovision Stage Two Containers Lambda Function ARN"
+    Value: !GetAtt deprovisionS2Containers.Arn
+
+  deprovisionS2ContainersIamRole:
+    Description: "Implicit IAM Role created for Deprovision Stage Two Containers function"
+    Value: !GetAtt deprovisionS2Containers.Arn
