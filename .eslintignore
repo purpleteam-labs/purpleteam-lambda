@@ -2,4 +2,5 @@
 .git/
 app-slave-provisioner/node_modules/
 selenium-standalone-provisioner/node_modules/
+s2-deprovisioner/node_modules/
 sam-app/
