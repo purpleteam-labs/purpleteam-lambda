@@ -7,14 +7,15 @@
   "license": "",
   "dependencies": {},
   "scripts": {
+    "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
     "lint": "eslint .",
-    "deps": "echo Checking top level packages ...; npm-check; echo Checking ./app-slave-provisioner ...; npm-check ./app-slave-provisioner; echo Checking ./selenium-standalone-provisioner ...; npm-check ./selenium-standalone-provisioner"
+    "deps": "npm-check"
   },
   "pre-commit": [
     "lint"
   ],
   "devDependencies": {
-    "eslint": "^5.10.0",
+    "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "npm-check": "^5.9.0",
