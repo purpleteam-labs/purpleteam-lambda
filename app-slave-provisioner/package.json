@@ -8,7 +8,7 @@
   "license": "",
   "dependencies": {
     "axios": "^0.18.0",
-    "convict": "^4.4.0"
+    "convict": "^4.4.1"
   },
   "scripts": {
     "deps": "npm-check",
