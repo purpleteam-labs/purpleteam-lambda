@@ -9,7 +9,17 @@
   "scripts": {
     "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
     "lint": "eslint .",
-    "deps": "npm-check"
+    "deps": "npm-check",
+    
+    "//": " --- Cloud General --- ",
+    "cloud:reinstall": "cd cloud/app-slave-provisioner/ && rm -rf node_modules/ && npm install",
+    
+    "//": " --- Cloud Build --- ",
+    "mkCloudDistDir": "mkdir -p cloudDist",
+    "build:appSlaveProvisionerPackage": "npm run mkCloudDistDir && cd cloud/app-slave-provisioner/ && zip -r ../../cloudDist/app-slave-provisioner.zip . -x out.txt",
+    "build:serverSlaveProvisionerPackage": "npm run mkCloudDistDir ",
+    "build:tlsSlaveProvisionerPackage": "npm run mkCloudDistDir ",
+    "build:cloudDeploymentPackage": "npm run build:appSlaveProvisionerPackage && npm run build:serverSlaveProvisionerPackage && npm run build:tlsSlaveProvisionerPackage"
   },
   "pre-commit": [
     "lint"
