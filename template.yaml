@@ -9,7 +9,7 @@ Globals:
     Runtime: nodejs8.10
     Environment:
       Variables: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-        NODE_ENV: development
+        NODE_ENV: local
         LAMBDA_TIMEOUT: 5 # Set the env var here, then ref it in code and subtract a little for internal timeout. Could also reference the env var from convict file.
 
 Resources:
@@ -17,19 +17,19 @@ Resources:
   provisionAppSlaves:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ./app-slave-provisioner
+      CodeUri: local/app-slave-provisioner
       Handler: index.provisionAppSlaves
 
   provisionSeleniumStandalones:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./selenium-standalone-provisioner
+      CodeUri: local/selenium-standalone-provisioner
       Handler: index.provisionSeleniumStandalones
 
   deprovisionS2Containers:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./s2-deprovisioner
+      CodeUri: local/s2-deprovisioner
       Handler: index.deprovisionS2Containers
 
 Outputs:
