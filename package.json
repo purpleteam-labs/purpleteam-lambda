@@ -10,16 +10,17 @@
     "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
     "lint": "eslint .",
     "deps": "npm-check",
-    
-    "//": " --- Cloud General --- ",
-    "cloud:reinstall": "cd cloud/app-slave-provisioner/ && rm -rf node_modules/ && npm install",
-    
     "//": " --- Cloud Build --- ",
+    "cloud:reinstall": "cd cloud/app-slave-provisioner/ && rm -rf node_modules/ && npm install",
     "mkCloudDistDir": "mkdir -p cloudDist",
+    "//": " --- Cloud Build - S2 Containers Up --- ",
     "build:appSlaveProvisionerPackage": "npm run mkCloudDistDir && cd cloud/app-slave-provisioner/ && zip -r ../../cloudDist/app-slave-provisioner.zip . -x out.txt",
     "build:serverSlaveProvisionerPackage": "npm run mkCloudDistDir ",
     "build:tlsSlaveProvisionerPackage": "npm run mkCloudDistDir ",
-    "build:cloudDeploymentPackage": "npm run build:appSlaveProvisionerPackage && npm run build:serverSlaveProvisionerPackage && npm run build:tlsSlaveProvisionerPackage"
+    "build:slaveProvisionerDeploymentPackages": "npm run build:appSlaveProvisionerPackage && npm run build:serverSlaveProvisionerPackage && npm run build:tlsSlaveProvisionerPackage",
+    "//": " --- Cloud Build - S2 Containers Down --- ",
+    "build:s2DeprovisionerPackage": "npm run mkCloudDistDir && cd cloud/s2-deprovisioner/ && zip -r ../../cloudDist/s2-deprovisioner.zip . -x out.txt",
+    "build:slaveDeprovisionerDeploymentPackage": "npm run build:s2DeprovisionerPackage"
   },
   "pre-commit": [
     "lint"
@@ -32,3 +33,4 @@
     "pre-commit": "^1.2.2"
   }
 }
+
