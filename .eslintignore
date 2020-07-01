@@ -1,6 +1,8 @@
 .gitignore
 .git/
-app-slave-provisioner/node_modules/
-selenium-standalone-provisioner/node_modules/
-s2-deprovisioner/node_modules/
+cloud/app-slave-provisioner/node_modules/
+cloud/s2-deprovisioner/node_modules/
+local/app-slave-provisioner/node_modules/
+local/selenium-standalone-provisioner/node_modules/
+local/s2-deprovisioner/node_modules/
 sam-app/
