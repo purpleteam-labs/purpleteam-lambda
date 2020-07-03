@@ -4,7 +4,7 @@ const internals = {};
 
 internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
 
-internals.developmentDeploySeleniumStandalones = async (dTOItems) => {
+internals.deploySeleniumStandalones = async (dTOItems) => {
   const timeout = internals.internalTimeout();
   const numberOfRequestedStandalones = dTOItems.length;
   if (numberOfRequestedStandalones < 1 || numberOfRequestedStandalones > 12) throw new Error(`The number of selenium nodes requested was: ${numberOfRequestedStandalones}. The supported number of testSessions is from 1-12`);
@@ -31,30 +31,26 @@ internals.developmentDeploySeleniumStandalones = async (dTOItems) => {
     const browserNumber = numberOfSeleniumStandaloneServiceNamesToAdd[itemClone.browser]
       - (runningCountOfSeleniumStandaloneServiceNamesLeftToAdd[itemClone.browser] - 1);
     runningCountOfSeleniumStandaloneServiceNamesLeftToAdd[itemClone.browser] -= 1;
-    itemClone.seleniumContainerName = `seleniumstandalone_${itemClone.browser}_${browserNumber}`;
+    itemClone.seleniumContainerName = `seleniumstandalone-${itemClone.browser}-${browserNumber}`;
     return itemClone;
   });
 };
 
-internals.productionDeploySeleniumStandalones = async () => {
-  throw new Error('Not Implemented');
-  // Todo: KC: Deploy ECS Task
-};
 
 exports.provisionSeleniumStandalones = async (event, context) => { // eslint-disable-line no-unused-vars
-  const env = process.env.NODE_ENV;
   internals.lambdaTimeout = process.env.LAMBDA_TIMEOUT;
   const { provisionViaLambdaDto: { items } } = event;
   let result;
   try {
-    result = await internals[`${env}DeploySeleniumStandalones`](items);
+    result = await internals.deploySeleniumStandalones(items);
   } catch (e) {
     if (e.message === 'timeout exceeded') result = 'Timeout exceeded: Selenium Standalone container(s) took too long to start.';
+    // Todo: We may need a default for unexpected cases. See the cloud function for ideas.
   }
 
   const response = {
     // 'statusCode': 200,
-    body: { provisionViaLambdaDto: { items: result } }
+    body: { provisionedViaLambdaDto: { items: result } }
   };
 
   return response;

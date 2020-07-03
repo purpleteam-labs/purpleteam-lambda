@@ -40,7 +40,7 @@ internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
  *
  */
 
-internals.developmentDeploySlaves = async (dTOItems) => {
+internals.deploySlaves = async (dTOItems) => {
   const numberOfRequestedSlaves = dTOItems.length;
   const timeout = internals.internalTimeout();
   if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of testSessions is from 1-12`);
@@ -55,31 +55,26 @@ internals.developmentDeploySlaves = async (dTOItems) => {
 
   return dTOItems.map((cV, i) => {
     const itemClone = { ...cV };
-    itemClone.appSlaveContainerName = `appslave_zap_${i + 1}`;
+    itemClone.appSlaveContainerName = `appslave-zap-${i + 1}`;
     return itemClone;
   });
 };
 
-internals.productionDeploySlaves = () => {
-  throw new Error('Not Implemented');
-  // Todo: KC: Deploy ECS Task
-};
-
 exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
   // Todo: KC: Do we need convict?
-  const env = config.get('env');
   internals.lambdaTimeout = config.get('lambdaTimeout');
   const { provisionViaLambdaDto: { items } } = event;
   let result;
   try {
-    result = await internals[`${env}DeploySlaves`](items);
+    result = await internals.deploySlaves(items);
   } catch (e) {
     if (e.message === 'timeout exceeded') result = 'Timeout exceeded: App Slave container(s) took too long to start.';
+    // Todo: We may need a default for unexpected cases. See the cloud function for ideas.
   }
 
   const response = {
     // 'statusCode': 200,
-    body: { provisionViaLambdaDto: { items: result } }
+    body: { provisionedViaLambdaDto: { items: result } }
   };
 
   return response;
