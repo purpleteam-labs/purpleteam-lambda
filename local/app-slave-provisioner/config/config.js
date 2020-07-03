@@ -3,8 +3,8 @@ const convict = require('convict');
 const schema = {
   env: {
     doc: 'The application environment.',
-    format: ['production', 'development', 'test'],
-    default: 'production',
+    format: ['local', 'test'],
+    default: 'local',
     env: 'NODE_ENV'
   },
   lambdaTimeout: {
