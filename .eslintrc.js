@@ -17,7 +17,9 @@ module.exports = {
     'function-paren-newline': ['error', 'multiline'],
     'import/no-unresolved': [{commonjs: true}],
     'no-unused-expressions': ["error", { 'allowShortCircuit': true, 'allowTernary': true }],
-    'object-curly-newline': ['error', { 'multiline': true }]    
+    'object-curly-newline': ['error', { 'multiline': true }],
+    // For logging:
+    'no-console': 'off'
   },
   env: {
     'node': true
