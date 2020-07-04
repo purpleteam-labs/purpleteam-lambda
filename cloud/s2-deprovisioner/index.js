@@ -1,10 +1,11 @@
 // Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ECS.html
 const ECS = require('aws-sdk/clients/ecs');
+
 const internals = {};
 
 internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
 
-internals.downContainers = async (ecsServiceNames, { clientContext: { Custom: { customer, customerClusterArn } } }) => {
+internals.downContainers = async (ecsServiceNames, { clientContext: { Custom: { /* customer, */ customerClusterArn } } }) => {
   const timeout = internals.internalTimeout();
   const ecs = new ECS({ region: process.env.AWS_REGION });
 
