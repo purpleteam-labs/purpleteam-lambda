@@ -6,10 +6,7 @@
   "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
   "license": "",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "aws-sdk": "^2.427.0"
-  },
+  "dependencies": {},
   "scripts": {
     "deps": "npm-check",
     "update:deps": "npm-check -u"
