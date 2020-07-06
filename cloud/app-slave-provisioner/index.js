@@ -63,23 +63,7 @@ internals.deploySlaves = async (dTOItems, {
   // Use this command to view the actual Arns: aws servicediscovery list-services | jq '.Services[].Arn'
   const serviceDiscoveryServiceArnPrefix = `arn:aws:servicediscovery:${process.env.AWS_REGION}:${accountId}:service/`;
   console.info(`The value of dTOItems is: ${JSON.stringify(dTOItems)}`);
-  // [
-  //   {
-  //       "testSessionId": "lowPrivUser",
-  //       "browser": "chrome",
-  //       "appSlaveContainerName": null,
-  //       "seleniumContainerName": null,
-  //       "ecsServiceName": null,
-  //       "taskDefinition": null
-  //   },{
-  //       "testSessionId": "adminUser",
-  //       "browser": "chrome",
-  //       "appSlaveContainerName": null,
-  //       "seleniumContainerName": null,
-  //       "ecsServiceName": null,
-  //       "taskDefinition": null
-  //   }
-  // ]
+
   const ecs = new ECS({ region: process.env.AWS_REGION });
   // Todo: Add error handling around number of requested containers.
 
@@ -154,7 +138,10 @@ internals.deploySlaves = async (dTOItems, {
       throw errors.default;
     });
 
-  return itemsWithExtras;
+  return itemsWithExtras.map((testSession) => {
+    const { appSlaveTaskDefinition, seleniumTaskDefinition, ...itemsForConsumer } = testSession;
+    return itemsForConsumer;
+  });
 };
 
 // Doc: context: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
@@ -173,23 +160,7 @@ exports.provisionAppSlaves = async (event, context) => {
     }[e.message];
   }
   console.info(`The resulting items were: ${JSON.stringify(result)}`);
-  // [
-  //   {
-  //       "testSessionId": "lowPrivUser",
-  //       "browser": "chrome",
-  //       "appSlaveContainerName": "appslave-zap-chrome-1",
-  //       "seleniumContainerName": "seleniumstandalone-chrome-1",
-  //       "ecsServiceName": "s2-app-chrome-1-cust0",
-  //       "taskDefinition": "s2-app-slave-chrome-1"
-  //   },{
-  //       "testSessionId": "adminUser",
-  //       "browser": "chrome",
-  //       "appSlaveContainerName": "appslave-zap-chrome-2",
-  //       "seleniumContainerName": "seleniumstandalone-chrome-2",
-  //       "ecsServiceName": "s2-app-chrome-2-cust0",
-  //       "taskDefinition": "s2-app-slave-chrome-2"
-  //   }
-  // ]
+
   const response = {
     // 'statusCode': 200,
     body: { provisionedViaLambdaDto: { items: result } }
