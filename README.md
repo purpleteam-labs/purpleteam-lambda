@@ -29,6 +29,10 @@ Clone this repository.
 
 # Install the aws cli
 
+It appears that v2 is somewhat different to install, details [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
+
+## Legacy v1 install below
+
 Read:
 
 * https://docs.aws.amazon.com/cli/latest/userguide/installing.html
@@ -71,7 +75,21 @@ AttributeError: 'module' object has no attribute 'SSL_ST_INIT'
 Then run: `pip install --upgrade pyOpenSSL`
 
 
-# [Install aws-sam-cli](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-additional.html)
+# Install aws-sam-cli
+
+The [install details](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) for Linux can be found [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html).  
+You will need to install brew first. Once you have done that `which brew` will show you were it is installed.  
+For us we use zsh, so adding homebrew to our path was just adding the following line to our ~/.zshrc file:  
+```shell
+export PATH=/home/linuxbrew/.linuxbrew/Homebrew/bin:$PATH
+```  
+Then just reload with the following command:  
+```shell
+source ~/.zshrc
+```  
+Your terminal should know where brew now is. Carry on with the aws-sam-cli install.
+
+## Legacy Python install below
 
 `pip install --user --upgrade aws-sam-cli`
 
@@ -81,7 +99,7 @@ So I did as [jfuss suggested](https://github.com/awslabs/aws-sam-cli/issues/922#
 `sudo apt-get install python-dev python3-dev`  
 Then tried `pip install --user --upgrade aws-sam-cli` again, and could now see `sam` listed in `~/.local/bin/`
 
-# [Validating SAM templates](https://github.com/awslabs/aws-sam-cli/blob/develop/docs/usage.md#validate-sam-templates)
+# [Validating SAM templates](https://github.com/awslabs/aws-sam-cli/blob/develop/docs/usage.md#validate-sam-templates) (probably still needs doing)
 
 In order to validate SAM templates, [you'll need](https://github.com/awslabs/aws-sam-cli/issues/394) an AWS user with CLI access and policy `AWSQuickSightListIAM` added to the group of the CLI user, then, usually the easiest way to do this is to run [`aws configure`](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) which will create two files ([`~/.aws/credentials`](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-credentials-shared.html) & `~/.aws/config`) if they don't already exist. The `aws_access_key_id` & `aws_secret_access_key` will be created in the `credentials` file if they don't exist, and the `output` & [`region`](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-region.html) will be created in the `config` file if they don't exist. If you don't set the region you'll end up with [errors](https://github.com/awslabs/aws-sam-cli/issues/442)  
 Next it's a good idea to make sure these files are `chmod 600` (by default mine was). I then `chmod 700` on `~/.aws/`, just like the `~/.ssh/` directory is.
