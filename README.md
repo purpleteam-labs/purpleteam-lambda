@@ -31,7 +31,7 @@ Clone this repository.
 
 It appears that v2 is somewhat different to install, details [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
-## Legacy v1 install below
+## Legacy v1 install of aws cli below
 
 Read:
 
@@ -89,7 +89,7 @@ source ~/.zshrc
 ```  
 Your terminal should know where brew now is. Carry on with the aws-sam-cli install.
 
-## Legacy Python install below
+## Legacy Python install of aws-sam-cli below
 
 `pip install --user --upgrade aws-sam-cli`
 
