@@ -2,14 +2,62 @@ const axios = require('axios');
 
 const internals = {};
 
-internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
+internals.printEnv = () => {
+  console.log('Environment Variables of interest follow.\nS2_PROVISIONING_TIMEOUT should be 2 seconds less than AWS_LAMBDA_FUNCTION_TIMEOUT: ', {
+    NODE_ENV: process.env.NODE_ENV,
+    S2_PROVISIONING_TIMEOUT: process.env.S2_PROVISIONING_TIMEOUT,
+    AWS_LAMBDA_FUNCTION_TIMEOUT: process.env.AWS_LAMBDA_FUNCTION_TIMEOUT // Only used in local.
+  });
+};
+
+
+internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) => new Promise(((resolve, reject) => {
+  const results = [];
+  let finished = 0;
+  const numPromises = promises.length;
+  let onFinish = () => {
+    if (finished < numPromises) {
+      if (resolvePartial) {
+        (resolve)(results);
+      } else {
+        throw new Error('Not all promises completed within the specified time');
+      }
+    } else {
+      (resolve)(results);
+    }
+    onFinish = null;
+  };
+
+  const fulfilAPromise = (i) => {
+    promises[i].then(
+      (res) => {
+        results[i] = res;
+        finished += 1;
+        if (finished === numPromises && onFinish) {
+          onFinish();
+        }
+      },
+      reject
+    );
+  };
+
+  for (let i = 0; i < numPromises; i += 1) {
+    results[i] = undefined;
+    fulfilAPromise(i);
+  }
+
+  setTimeout(() => { if (onFinish) onFinish(); }, timeout);
+}));
+
 
 internals.deploySeleniumStandalones = async (dTOItems) => {
-  const timeout = internals.internalTimeout();
+  const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
   const numberOfRequestedStandalones = dTOItems.length;
-  if (numberOfRequestedStandalones < 1 || numberOfRequestedStandalones > 12) throw new Error(`The number of selenium nodes requested was: ${numberOfRequestedStandalones}. The supported number of testSessions is from 1-12`);
+  const result = { items: undefined, error: undefined };
 
-  const http = axios.create({ timeout /* default is 0 (no timeout) */, baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
+  if (numberOfRequestedStandalones < 1 || numberOfRequestedStandalones > 12) throw new Error(`The number of selenium nodes requested was: ${numberOfRequestedStandalones}. The supported number of Test Sessions is from 1-12 inclusive.`);
+
+  const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
   const browserCounts = dTOItems.map(cV => cV.browser).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = 1 + (accumulator[currentValue] || 0);
@@ -17,40 +65,37 @@ internals.deploySeleniumStandalones = async (dTOItems) => {
   }, {});
 
   const promisedResponses = Object.keys(browserCounts).map(b => http.put('/services', { service: b, project: 'selenium-standalone', num: browserCounts[b] }));
-  await Promise.all(promisedResponses)
-    .catch((e) => {
-      if (e.message === `timeout of ${timeout}ms exceeded`) throw new Error('timeout exceeded');
-      throw e;
-    });
+  const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
+
+  resolved.every(e => !e) && (result.error = 'Timeout exceeded: Selenium Standalone container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
 
   const numberOfSeleniumStandaloneServiceNamesToAdd = { ...browserCounts };
   const runningCountOfSeleniumStandaloneServiceNamesLeftToAdd = { ...browserCounts };
 
-  return dTOItems.map((cV) => {
+  result.items = dTOItems.map((cV) => {
     const itemClone = { ...cV };
     const browserNumber = numberOfSeleniumStandaloneServiceNamesToAdd[itemClone.browser]
       - (runningCountOfSeleniumStandaloneServiceNamesLeftToAdd[itemClone.browser] - 1);
     runningCountOfSeleniumStandaloneServiceNamesLeftToAdd[itemClone.browser] -= 1;
-    itemClone.seleniumContainerName = `seleniumstandalone-${itemClone.browser}-${browserNumber}`;
+    itemClone.seleniumContainerName = `seleniumstandalone_${itemClone.browser}_${browserNumber}`;
     return itemClone;
   });
+
+  return result;
 };
 
 
 exports.provisionSeleniumStandalones = async (event, context) => { // eslint-disable-line no-unused-vars
-  internals.lambdaTimeout = process.env.LAMBDA_TIMEOUT;
+  internals.s2ProvisioningTimeout = process.env.S2_PROVISIONING_TIMEOUT * 1000;
   const { provisionViaLambdaDto: { items } } = event;
-  let result;
-  try {
-    result = await internals.deploySeleniumStandalones(items);
-  } catch (e) {
-    if (e.message === 'timeout exceeded') result = 'Timeout exceeded: Selenium Standalone container(s) took too long to start.';
-    // Todo: We may need a default for unexpected cases. See the cloud function for ideas.
-  }
+  const { deploySeleniumStandalones, printEnv } = internals;
+  printEnv();
+
+  const result = await deploySeleniumStandalones(items);
 
   const response = {
     // 'statusCode': 200,
-    body: { provisionedViaLambdaDto: { items: result } }
+    body: { provisionedViaLambdaDto: result }
   };
 
   return response;

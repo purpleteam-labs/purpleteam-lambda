@@ -1,80 +1,89 @@
 const axios = require('axios');
-const config = require('./config/config.js');
 
 const internals = {};
 
-internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
-
-/**
- *
- * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
- * @param {Object} event - API Gateway Lambda Proxy Input Format
- * @param {string} event.resource - Resource path.
- * @param {string} event.path - Path parameter.
- * @param {string} event.httpMethod - Incoming request's method name.
- * @param {Object} event.headers - Incoming request headers.
- * @param {Object} event.queryStringParameters - query string parameters.
- * @param {Object} event.pathParameters - path parameters.
- * @param {Object} event.stageVariables - Applicable stage variables.
- * @param {Object} event.requestContext - Request context, including authorizer-returned key-value pairs, requestId, sourceIp, etc.
- * @param {Object} event.body - A JSON string of the request payload.
- * @param {boolean} event.body.isBase64Encoded - A boolean flag to indicate if the applicable request payload is Base64-encode
- *
- * Context doc: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
- * @param {Object} context
- * @param {string} context.logGroupName - Cloudwatch Log Group name
- * @param {string} context.logStreamName - Cloudwatch Log stream name.
- * @param {string} context.functionName - Lambda function name.
- * @param {string} context.memoryLimitInMB - Function memory.
- * @param {string} context.functionVersion - Function version identifier.
- * @param {function} context.getRemainingTimeInMillis - Time in milliseconds before function times out.
- * @param {string} context.awsRequestId - Lambda request ID.
- * @param {string} context.invokedFunctionArn - Function ARN.
- *
- * Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
- * @returns {Object} object - API Gateway Lambda Proxy Output Format
- * @returns {boolean} object.isBase64Encoded - A boolean flag to indicate if the applicable payload is Base64-encode (binary support)
- * @returns {string} object.statusCode - HTTP Status Code to be returned to the client
- * @returns {Object} object.headers - HTTP Headers to be returned
- * @returns {Object} object.body - JSON Payload to be returned
- *
- */
-
-internals.deploySlaves = async (dTOItems) => {
-  const numberOfRequestedSlaves = dTOItems.length;
-  const timeout = internals.internalTimeout();
-  if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of testSessions is from 1-12`);
-
-  const http = axios.create({ timeout /* default is 0 (no timeout) */, baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
-
-  await http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves })
-    .catch((e) => {
-      if (e.message === `timeout of ${timeout}ms exceeded`) throw new Error('timeout exceeded');
-      throw e;
-    });
-
-  return dTOItems.map((cV, i) => {
-    const itemClone = { ...cV };
-    itemClone.appSlaveContainerName = `appslave-zap-${i + 1}`;
-    return itemClone;
+internals.printEnv = () => {
+  console.log('Environment Variables of interest follow.\nS2_PROVISIONING_TIMEOUT should be 2 seconds less than AWS_LAMBDA_FUNCTION_TIMEOUT: ', {
+    NODE_ENV: process.env.NODE_ENV,
+    S2_PROVISIONING_TIMEOUT: process.env.S2_PROVISIONING_TIMEOUT,
+    AWS_LAMBDA_FUNCTION_TIMEOUT: process.env.AWS_LAMBDA_FUNCTION_TIMEOUT // Only used in local.
   });
 };
 
-exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
-  // Todo: KC: Do we need convict?
-  internals.lambdaTimeout = config.get('lambdaTimeout');
-  const { provisionViaLambdaDto: { items } } = event;
-  let result;
-  try {
-    result = await internals.deploySlaves(items);
-  } catch (e) {
-    if (e.message === 'timeout exceeded') result = 'Timeout exceeded: App Slave container(s) took too long to start.';
-    // Todo: We may need a default for unexpected cases. See the cloud function for ideas.
+
+internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) => new Promise(((resolve, reject) => {
+  const results = [];
+  let finished = 0;
+  const numPromises = promises.length;
+  let onFinish = () => {
+    if (finished < numPromises) {
+      if (resolvePartial) {
+        (resolve)(results);
+      } else {
+        throw new Error('Not all promises completed within the specified time');
+      }
+    } else {
+      (resolve)(results);
+    }
+    onFinish = null;
+  };
+
+  const fulfilAPromise = (i) => {
+    promises[i].then(
+      (res) => {
+        results[i] = res;
+        finished += 1;
+        if (finished === numPromises && onFinish) {
+          onFinish();
+        }
+      },
+      reject
+    );
+  };
+
+  for (let i = 0; i < numPromises; i += 1) {
+    results[i] = undefined;
+    fulfilAPromise(i);
   }
+
+  setTimeout(() => { if (onFinish) onFinish(); }, timeout);
+}));
+
+
+internals.deploySlaves = async (dTOItems) => {
+  const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
+  const numberOfRequestedSlaves = dTOItems.length;
+  const result = { items: undefined, error: undefined };
+
+  if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of Test Sessions is from 1-12 inclusive.`);
+
+  // timeout in axios is for response times only, if the end-point is down, it will still take a long time. So we just wrap the actual request.
+  const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
+
+  const promisedResponse = http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
+  const resolved = await promiseAllTimeout([promisedResponse], s2ProvisioningTimeout);
+
+  !resolved[0] && (result.error = 'Timeout exceeded: App Slave container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
+
+  result.items = dTOItems.map((cV, i) => {
+    const itemClone = { ...cV };
+    itemClone.appSlaveContainerName = `appslave_zap_${i + 1}`;
+    return itemClone;
+  });
+
+  return result;
+};
+
+exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
+  internals.s2ProvisioningTimeout = process.env.S2_PROVISIONING_TIMEOUT * 1000;
+  const { provisionViaLambdaDto: { items } } = event;
+  const { deploySlaves, printEnv } = internals;
+  printEnv();
+  const result = await deploySlaves(items);
 
   const response = {
     // 'statusCode': 200,
-    body: { provisionedViaLambdaDto: { items: result } }
+    body: { provisionedViaLambdaDto: result }
   };
 
   return response;

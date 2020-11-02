@@ -3,42 +3,52 @@ const ECS = require('aws-sdk/clients/ecs');
 
 const internals = {};
 
-internals.internalTimeout = () => (internals.lambdaTimeout - 2) * 1000;
+internals.printEnv = () => {
+  console.log('Environment Variables of interest follow.\nS2_PROVISIONING_TIMEOUT should be 2 seconds less than Lambda "Timeout": ', {
+    NODE_ENV: process.env.NODE_ENV,
+    S2_PROVISIONING_TIMEOUT: process.env.S2_PROVISIONING_TIMEOUT,
+    AWS_REGION: process.env.AWS_REGION
+  });
+};
 
-/**
- *
- * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
- * @param {Object} event - API Gateway Lambda Proxy Input Format
- * @param {string} event.resource - Resource path.
- * @param {string} event.path - Path parameter.
- * @param {string} event.httpMethod - Incoming request's method name.
- * @param {Object} event.headers - Incoming request headers.
- * @param {Object} event.queryStringParameters - query string parameters.
- * @param {Object} event.pathParameters - path parameters.
- * @param {Object} event.stageVariables - Applicable stage variables.
- * @param {Object} event.requestContext - Request context, including authorizer-returned key-value pairs, requestId, sourceIp, etc.
- * @param {Object} event.body - A JSON string of the request payload.
- * @param {boolean} event.body.isBase64Encoded - A boolean flag to indicate if the applicable request payload is Base64-encode
- *
- * Context doc: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
- * @param {Object} context
- * @param {string} context.logGroupName - Cloudwatch Log Group name
- * @param {string} context.logStreamName - Cloudwatch Log stream name.
- * @param {string} context.functionName - Lambda function name.
- * @param {string} context.memoryLimitInMB - Function memory.
- * @param {string} context.functionVersion - Function version identifier.
- * @param {function} context.getRemainingTimeInMillis - Time in milliseconds before function times out.
- * @param {string} context.awsRequestId - Lambda request ID.
- * @param {string} context.invokedFunctionArn - Function ARN.
- *
- * Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
- * @returns {Object} object - API Gateway Lambda Proxy Output Format
- * @returns {boolean} object.isBase64Encoded - A boolean flag to indicate if the applicable payload is Base64-encode (binary support)
- * @returns {string} object.statusCode - HTTP Status Code to be returned to the client
- * @returns {Object} object.headers - HTTP Headers to be returned
- * @returns {Object} object.body - JSON Payload to be returned
- *
- */
+
+internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) => new Promise(((resolve, reject) => {
+  const results = [];
+  let finished = 0;
+  const numPromises = promises.length;
+  let onFinish = () => {
+    if (finished < numPromises) {
+      if (resolvePartial) {
+        (resolve)(results);
+      } else {
+        throw new Error('Not all promises completed within the specified time');
+      }
+    } else {
+      (resolve)(results);
+    }
+    onFinish = null;
+  };
+
+  const fulfilAPromise = (i) => {
+    promises[i].then(
+      (res) => {
+        results[i] = res;
+        finished += 1;
+        if (finished === numPromises && onFinish) {
+          onFinish();
+        }
+      },
+      reject
+    );
+  };
+
+  for (let i = 0; i < numPromises; i += 1) {
+    results[i] = undefined;
+    fulfilAPromise(i);
+  }
+
+  setTimeout(() => { if (onFinish) onFinish(); }, timeout);
+}));
 
 
 internals.deploySlaves = async (dTOItems, {
@@ -50,13 +60,11 @@ internals.deploySlaves = async (dTOItems, {
     }
   }
 }) => {
-  const timeout = internals.internalTimeout();
+  const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
+  const result = { items: undefined, error: undefined };
   // Doc: [Lambda Environment Variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
   console.info(`provisionAppSlaves invoked for pt customer: ${customer}.`);
   console.info(`The customerClusterArn is: ${customerClusterArn}`);
-  console.info(`We are running in region: ${process.env.AWS_REGION}`);
-  console.info(`The internals.internalTimeout() is ${timeout}`);
-  console.info(`The NODE_ENV is: ${process.env.NODE_ENV}`);
   console.info(`The Account Id is: ${invokedFunctionArn.split(':')[4]}`);
   console.info(`The serviceDiscoveryServices are ${JSON.stringify(serviceDiscoveryServices)}`);
   const accountId = invokedFunctionArn.split(':')[4];
@@ -64,8 +72,9 @@ internals.deploySlaves = async (dTOItems, {
   const serviceDiscoveryServiceArnPrefix = `arn:aws:servicediscovery:${process.env.AWS_REGION}:${accountId}:service/`;
   console.info(`The value of dTOItems is: ${JSON.stringify(dTOItems)}`);
 
+  if (dTOItems.length < 1 || dTOItems.length > 12) throw new Error(`The number of items requested was: ${dTOItems.length}. The supported number of Test Sessions is from 1-12 inclusive.`);
+
   const ecs = new ECS({ region: process.env.AWS_REGION });
-  // Todo: Add error handling around number of requested containers.
 
   const browserCounts = dTOItems.map(cV => cV.browser).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = 1 + (accumulator[currentValue] || 0);
@@ -121,49 +130,40 @@ internals.deploySlaves = async (dTOItems, {
       registryArn: cV.serviceDiscoveryServiceArn
     }]
   }).promise());
+  try {
+    const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
+    console.info(`The data objects returned from calling ecs.createService were: ${JSON.stringify(resolved)}`);
+    resolved.every(e => !e) && (result.error = 'Timeout exceeded: App Slave container(s) took too long to start. Although they timed out, they may have still started.');
+  } catch (e) {
+    console.error('Exception occurred, details follow:');
+    console.error(e);
+    // If we find more errors from ecs, add them here, along with handling in the resolvePromises routine of app.parallel.js
+    result.error = e.message === 'Creation of service was not idempotent.'
+      ? 'Creation of service was not idempotent.'
+      : 'Unexpected error in Lambda occurred';
+  }
 
-  await Promise.all(promisedResponses)
-    .then((values) => {
-      console.info(`The data objects returned from calling ecs.createService were: ${JSON.stringify(values)}`);
-    }).catch((e) => {
-      console.warn(`The exception follows: ${e}`);
-      // Not sure what a timeout looks like in cloud yet.
-      // if (e.message === `timeout of ${timeout}ms exceeded`) throw new Error('timeout exceeded');
-      const errors = {
-        'Creation of service was not idempotent.': new Error('Creation of service was not idempotent.'),
-        default: new Error('defaultError')
-      };
-      if (e.message === 'Creation of service was not idempotent.') throw errors[e.message];
-
-      throw errors.default;
-    });
-
-  return itemsWithExtras.map((testSession) => {
+  result.items = itemsWithExtras.map((testSession) => {
     const { appSlaveTaskDefinition, seleniumTaskDefinition, ...itemsForConsumer } = testSession;
     return itemsForConsumer;
   });
+
+  return result;
 };
 
 // Doc: context: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
 exports.provisionAppSlaves = async (event, context) => {
-  // console.debug(process.env.AWS_ACCESS_KEY_ID);
-  internals.lambdaTimeout = process.env.LAMBDA_TIMEOUT;
+  internals.s2ProvisioningTimeout = process.env.S2_PROVISIONING_TIMEOUT * 1000;
   const { provisionViaLambdaDto: { items } } = event;
-  let result;
-  try {
-    result = await internals.deploySlaves(items, context);
-  } catch (e) {
-    result = {
-      'timeout exceeded': 'Timeout exceeded: App Slave container(s) took too long to start.',
-      'Creation of service was not idempotent.': 'Creation of service was not idempotent.',
-      defaultError: 'Unexpected error in Lambda occurred, check the Lambda logs for details.'
-    }[e.message];
-  }
-  console.info(`The resulting items were: ${JSON.stringify(result)}`);
+  const { deploySlaves, printEnv } = internals;
+  printEnv();
+  const result = await deploySlaves(items, context);
+
+  console.info(`The resulting items were: ${JSON.stringify(result.items)}`);
 
   const response = {
     // 'statusCode': 200,
-    body: { provisionedViaLambdaDto: { items: result } }
+    body: { provisionedViaLambdaDto: result }
   };
 
   return response;
