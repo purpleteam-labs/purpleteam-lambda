@@ -7,7 +7,7 @@
   "author": "binarymist",
   "license": "",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.1"
   },
   "scripts": {
     "deps": "npm-check",
