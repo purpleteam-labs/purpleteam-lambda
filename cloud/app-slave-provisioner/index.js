@@ -138,9 +138,12 @@ internals.deploySlaves = async (dTOItems, {
     console.error('Exception occurred, details follow:');
     console.error(e);
     // If we find more errors from ecs, add them here, along with handling in the resolvePromises routine of app.parallel.js
-    result.error = e.message === 'Creation of service was not idempotent.'
-      ? 'Creation of service was not idempotent.'
-      : 'Unexpected error in Lambda occurred';
+    console.error(e.message);
+    const knownErrors = [
+      'Creation of service was not idempotent.',
+      'Unable to Start a service that is still Draining.'
+    ];
+    result.error = knownErrors.includes(e.message) ? e.message : 'Unexpected error in Lambda occurred';
   }
 
   result.items = itemsWithExtras.map((testSession) => {
