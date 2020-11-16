@@ -14,8 +14,8 @@
   <tbody>
     <tr>
       <td colspan="1"></td>
-      <td colspan="2" >local</td>
-      <td colspan="3">cloud</td>
+      <td colspan="3">local</td>
+      <td colspan="2">cloud</td>
     </tr>
     <tr>
       <td>Top Level</td>
