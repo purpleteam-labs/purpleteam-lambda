@@ -10,7 +10,11 @@
 <br/><br/>
 
 <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json">
-  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json" style="max-width:100%;"></a>
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json" style="max-width:100%;">
+</a>
+
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/local/selenium-standalone-provisioner?targetFile=/local/selenium-standalone-provisioner/package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/local/selenium-standalone-provisioner/badge.svg?targetFile=/local/selenium-standalone-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/local/selenium-standalone-provisioner?targetFile=/local/selenium-standalone-provisioner/package.json" style="max-width:100%;">
 </a>
 
 <br/><br/>
