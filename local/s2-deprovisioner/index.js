@@ -55,10 +55,10 @@ internals.downContainers = async (containerNames) => {
   const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
   const s2ProjectNames = [...containerNames];
 
-  const promisedResponses = s2ProjectNames.map(pN => http.post('/down', { id: pN }));
+  const promisedResponses = s2ProjectNames.map((pN) => http.post('/down', { id: pN }));
   const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
 
-  return resolved.every(e => !!e)
+  return resolved.every((e) => !!e)
     ? { item: `Stage Two projects (${s2ProjectNames}) have been brought down.` }
     : { error: `Timeout exceeded while attempting to bring the Stage Two projects (${s2ProjectNames}) down. One or more may still be running.` };
 };

@@ -1,5 +1,5 @@
 // Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ECS.html
-const ECS = require('aws-sdk/clients/ecs');
+const ECS = require('aws-sdk/clients/ecs'); // eslint-disable-line import/no-unresolved
 
 const internals = {};
 
@@ -55,7 +55,7 @@ internals.downContainers = async (ecsServiceNames, { clientContext: { Custom: { 
   const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
   const ecs = new ECS({ region: process.env.AWS_REGION });
 
-  const promisedResponses = ecsServiceNames.map(sN => ecs.deleteService({
+  const promisedResponses = ecsServiceNames.map((sN) => ecs.deleteService({
     cluster: customerClusterArn,
     service: sN,
     force: true
@@ -64,7 +64,7 @@ internals.downContainers = async (ecsServiceNames, { clientContext: { Custom: { 
 
   console.info(`These are the values returned from ecs.deleteService: ${JSON.stringify(resolved)}`);
 
-  return resolved.every(e => !!e)
+  return resolved.every((e) => !!e)
     ? { item: `Stage Two ECS services (${JSON.stringify(ecsServiceNames)}) have been brought down.` }
     : { error: `Timeout exceeded while attempting to bring the ECS service(s) (${ecsServiceNames}) down. One or more may still be running.` };
 };

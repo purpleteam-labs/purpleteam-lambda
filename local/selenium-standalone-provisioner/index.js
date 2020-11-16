@@ -59,15 +59,15 @@ internals.deploySeleniumStandalones = async (dTOItems) => {
 
   const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
-  const browserCounts = dTOItems.map(cV => cV.browser).reduce((accumulator, currentValue) => {
+  const browserCounts = dTOItems.map((cV) => cV.browser).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = 1 + (accumulator[currentValue] || 0);
     return accumulator;
   }, {});
 
-  const promisedResponses = Object.keys(browserCounts).map(b => http.put('/services', { service: b, project: 'selenium-standalone', num: browserCounts[b] }));
+  const promisedResponses = Object.keys(browserCounts).map((b) => http.put('/services', { service: b, project: 'selenium-standalone', num: browserCounts[b] }));
   const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
 
-  resolved.every(e => !e) && (result.error = 'Timeout exceeded: Selenium Standalone container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
+  resolved.every((e) => !e) && (result.error = 'Timeout exceeded: Selenium Standalone container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
 
   const numberOfSeleniumStandaloneServiceNamesToAdd = { ...browserCounts };
   const runningCountOfSeleniumStandaloneServiceNamesLeftToAdd = { ...browserCounts };

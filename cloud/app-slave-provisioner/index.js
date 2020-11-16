@@ -1,5 +1,5 @@
 // Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ECS.html
-const ECS = require('aws-sdk/clients/ecs');
+const ECS = require('aws-sdk/clients/ecs'); // eslint-disable-line import/no-unresolved
 
 const internals = {};
 
@@ -76,7 +76,7 @@ internals.deploySlaves = async (dTOItems, {
 
   const ecs = new ECS({ region: process.env.AWS_REGION });
 
-  const browserCounts = dTOItems.map(cV => cV.browser).reduce((accumulator, currentValue) => {
+  const browserCounts = dTOItems.map((cV) => cV.browser).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = 1 + (accumulator[currentValue] || 0);
     return accumulator;
   }, {});
@@ -100,14 +100,14 @@ internals.deploySlaves = async (dTOItems, {
     return itemClone;
   });
   console.info(`The value of itemsWithExtras is: ${JSON.stringify(itemsWithExtras)}`);
-  const appItemsWithExtras = itemsWithExtras.map(item => ({
+  const appItemsWithExtras = itemsWithExtras.map((item) => ({
     containerName: item.appSlaveContainerName,
     taskDefinition: item.appSlaveTaskDefinition,
     ecsServiceName: item.appEcsServiceName,
     serviceDiscoveryServiceArn: item.appServiceDiscoveryServiceArn,
     containerPort: 8080
   }));
-  const seleniumItemsWithExtras = itemsWithExtras.map(item => ({
+  const seleniumItemsWithExtras = itemsWithExtras.map((item) => ({
     containerName: item.seleniumContainerName,
     taskDefinition: item.seleniumTaskDefinition,
     ecsServiceName: item.seleniumEcsServiceName,
@@ -117,7 +117,7 @@ internals.deploySlaves = async (dTOItems, {
   const splitItemsWithExtras = [...appItemsWithExtras, ...seleniumItemsWithExtras];
   console.info(`The value of splitItemsWithExtras is: ${JSON.stringify(splitItemsWithExtras)}`);
 
-  const promisedResponses = splitItemsWithExtras.map(cV => ecs.createService({
+  const promisedResponses = splitItemsWithExtras.map((cV) => ecs.createService({
     cluster: customerClusterArn,
     serviceName: cV.ecsServiceName,
     taskDefinition: cV.taskDefinition,
@@ -133,7 +133,7 @@ internals.deploySlaves = async (dTOItems, {
   try {
     const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
     console.info(`The data objects returned from calling ecs.createService were: ${JSON.stringify(resolved)}`);
-    resolved.every(e => !e) && (result.error = 'Timeout exceeded: App Slave container(s) took too long to start. Although they timed out, they may have still started.');
+    resolved.every((e) => !e) && (result.error = 'Timeout exceeded: App Slave container(s) took too long to start. Although they timed out, they may have still started.');
   } catch (e) {
     console.error('Exception occurred, details follow:');
     console.error(e);
