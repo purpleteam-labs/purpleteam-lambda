@@ -7,13 +7,13 @@
   "author": "binarymist",
   "license": "",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.21.0"
   },
   "scripts": {
     "deps": "npm-check",
     "update:deps": "npm-check -u"
   },
   "devDependencies": {
-    "npm-check": "^5.9.0"
+    "npm-check": "^5.9.2"
   }
 }

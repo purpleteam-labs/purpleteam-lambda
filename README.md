@@ -9,19 +9,11 @@
   
 <br/><br/>
 
-<a href="https://gitlab.com/purpleteam-labs/purpleteam-lambda/commits/master" title="pipeline status">
-   <img src="https://gitlab.com/purpleteam-labs/purpleteam-lambda/badges/master/pipeline.svg" alt="pipeline status">
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=package.json" style="max-width:100%;"></a>
 </a>
 
-<a href="https://gitlab.com/purpleteam-labs/purpleteam-lambda/commits/master" title="test coverage">
-   <img src="https://gitlab.com/purpleteam-labs/purpleteam-lambda/badges/master/coverage.svg" alt="test coverage">
-</a>
-
-<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=app-slave-provisioner/package.json" title="known vulnerabilities">
-  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=app-slave-provisioner/package.json" alt="known vulnerabilities"/>
-</a>
-
-<br/><br/><br/>
+<br/><br/>
 </div>
 
 

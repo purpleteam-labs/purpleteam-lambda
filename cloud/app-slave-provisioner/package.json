@@ -12,6 +12,6 @@
     "update:deps": "npm-check -u"
   },
   "devDependencies": {
-    "npm-check": "^5.9.0"
+    "npm-check": "^5.9.2"
   }
 }

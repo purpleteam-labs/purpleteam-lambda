@@ -10,6 +10,7 @@
     "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
     "lint": "eslint .",
     "deps": "npm-check",
+    "update:deps": "npm-check -u",
     "//": " --- Cloud Build --- ",
     "cloud:reinstall": "cd cloud/app-slave-provisioner/ && rm -rf node_modules/ && npm install",
     "mkCloudDistDir": "mkdir -p cloudDist",
