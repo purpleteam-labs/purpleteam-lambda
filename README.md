@@ -17,6 +17,22 @@
   <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/selenium-standalone-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/selenium-standalone-provisioner/package.json" style="max-width:100%;">
 </a>
 
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-slave-provisioner/package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/app-slave-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-slave-provisioner/package.json" style="max-width:100%;">
+</a>
+
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/s2-deprovisioner/package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/s2-deprovisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/s2-deprovisioner/package.json" style="max-width:100%;">
+</a>
+
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/cloud/app-slave-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json" style="max-width:100%;">
+</a>
+
+<a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json">
+  <img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/cloud/app-slave-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json" style="max-width:100%;">
+</a>
+
 <br/><br/>
 </div>
 
