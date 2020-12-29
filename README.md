@@ -6,7 +6,7 @@
   <br/>
 <br/>
 <h2>purpleteam lambda functions</h2><br/>
-lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">purpleteam</a>
+lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">purpleteam</a> - Currently in alpha
 <br/><br/>
 
 
