@@ -1,10 +1,10 @@
 {
   "name": "purpleteam-lambda",
   "version": "0.0.0",
-  "description": "purpleteam lambda functions",
+  "description": "Lambda functions of purpleteam -- security regression testing SaaS",
   "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
-  "license": "",
+  "license": "AGPL-3.0-only",
   "dependencies": {},
   "scripts": {
     "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
@@ -32,5 +32,8 @@
     "eslint-plugin-import": "^2.22.1",
     "npm-check": "^5.9.2",
     "pre-commit": "^1.2.2"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/purpleteam-labs/purpleteam/issues"
   }
 }

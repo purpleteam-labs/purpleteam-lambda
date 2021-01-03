@@ -1,11 +1,11 @@
 {
   "name": "s2-deprovisioner",
   "version": "0.0.0",
-  "description": "purpleteam s2 deprovisioner",
+  "description": "purpleteam s2 deprovisioner for cloud environment",
   "main": "index.js",
   "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
-  "license": "",
+  "license": "AGPL-3.0-only",
   "dependencies": {},
   "scripts": {
     "deps": "npm-check",

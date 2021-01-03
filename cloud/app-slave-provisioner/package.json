@@ -1,11 +1,11 @@
 {
   "name": "app-slave-provisioner",
   "version": "0.0.0",
-  "description": "purpleteam app-slave provisioner",
+  "description": "purpleteam app-slave provisioner for cloud environment",
   "main": "index.js",
   "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
   "author": "binarymist",
-  "license": "",
+  "license": "AGPL-3.0-only",
   "dependencies": {},
   "scripts": {
     "deps": "npm-check",
