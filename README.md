@@ -9,6 +9,9 @@
 lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">purpleteam</a> - Currently in alpha
 <br/><br/>
 
+<a href="https://www.gnu.org/licenses/agpl-3.0" title="license">
+  <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="GNU AGPL">
+</a>
 
 <table>
   <tbody>
