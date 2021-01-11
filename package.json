@@ -1,9 +1,9 @@
 {
   "name": "purpleteam-lambda",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.1",
   "description": "Lambda functions of purpleteam -- security regression testing SaaS",
-  "repository": "https://gitlab.com/purpleteam-labs/purpleteam-lambda",
-  "author": "binarymist",
+  "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
+  "author": "Kim Carter",
   "license": "AGPL-3.0-only",
   "dependencies": {},
   "scripts": {
@@ -34,6 +34,6 @@
     "pre-commit": "^1.2.2"
   },
   "bugs": {
-    "url": "https://gitlab.com/purpleteam-labs/purpleteam/issues"
+    "url": "https://github.com/purpleteam-labs/purpleteam/issues"
   }
 }
