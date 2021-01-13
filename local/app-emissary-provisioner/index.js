@@ -66,36 +66,36 @@ internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) =
 }));
 
 
-internals.deploySlaves = async (dTOItems) => {
+internals.deployEmissaries = async (dTOItems) => {
   const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
-  const numberOfRequestedSlaves = dTOItems.length;
+  const numberOfRequestedEmissaries = dTOItems.length;
   const result = { items: undefined, error: undefined };
 
-  if (numberOfRequestedSlaves < 1 || numberOfRequestedSlaves > 12) throw new Error(`The number of app-slaves requested was: ${numberOfRequestedSlaves}. The supported number of Test Sessions is from 1-12 inclusive.`);
+  if (numberOfRequestedEmissaries < 1 || numberOfRequestedEmissaries > 12) throw new Error(`The number of app-emissaries requested was: ${numberOfRequestedEmissaries}. The supported number of Test Sessions is from 1-12 inclusive.`);
 
   // timeout in axios is for response times only, if the end-point is down, it will still take a long time. So we just wrap the actual request.
   const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
 
-  const promisedResponse = http.put('/services', { service: 'zap', project: 'app-slave', num: numberOfRequestedSlaves });
+  const promisedResponse = http.put('/services', { service: 'zap', project: 'app-emissary', num: numberOfRequestedEmissaries });
   const resolved = await promiseAllTimeout([promisedResponse], s2ProvisioningTimeout);
 
-  !resolved[0] && (result.error = 'Timeout exceeded: App Slave container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
+  !resolved[0] && (result.error = 'Timeout exceeded: App Emissary container(s) took too long to start. Although they timed out, they may have still started. Also check that docker-compose-ui is up.');
 
   result.items = dTOItems.map((cV, i) => {
     const itemClone = { ...cV };
-    itemClone.appSlaveContainerName = `appslave_zap_${i + 1}`;
+    itemClone.appEmissaryContainerName = `appemissary_zap_${i + 1}`;
     return itemClone;
   });
 
   return result;
 };
 
-exports.provisionAppSlaves = async (event, context) => { // eslint-disable-line no-unused-vars
+exports.provisionAppEmissaries = async (event, context) => { // eslint-disable-line no-unused-vars
   internals.s2ProvisioningTimeout = process.env.S2_PROVISIONING_TIMEOUT * 1000;
   const { provisionViaLambdaDto: { items } } = event;
-  const { deploySlaves, printEnv } = internals;
+  const { deployEmissaries, printEnv } = internals;
   printEnv();
-  const result = await deploySlaves(items);
+  const result = await deployEmissaries(items);
 
   const response = {
     // 'statusCode': 200,

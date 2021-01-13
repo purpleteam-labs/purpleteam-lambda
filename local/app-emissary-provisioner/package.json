@@ -1,13 +1,13 @@
 {
-  "name": "app-slave-provisioner",
+  "name": "app-emissary-provisioner",
   "version": "0.1.0-alpha.1",
-  "description": "purpleteam app-slave provisioner for local environment",
+  "description": "purpleteam app-emissary provisioner for local environment",
   "main": "index.js",
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",
   "license": "AGPL-3.0-only",
   "dependencies": {
-    "axios": "^0.21.0"
+    "axios": "^0.21.1"
   },
   "scripts": {
     "deps": "npm-check",

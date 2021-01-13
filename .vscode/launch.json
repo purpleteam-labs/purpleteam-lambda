@@ -15,12 +15,12 @@
       "protocol": "inspector",
       "stopOnEntry": false
     }, {
-      "name": "app-slave-provisioner",
+      "name": "app-emissary-provisioner",
       "type": "node",
       "request": "attach",
       "address": "localhost",
       "port": 5858,
-      "localRoot": "${workspaceFolder}/local/app-slave-provisioner",
+      "localRoot": "${workspaceFolder}/local/app-emissary-provisioner",
       "remoteRoot": "/var/task",
       "protocol": "inspector",
       "stopOnEntry": false

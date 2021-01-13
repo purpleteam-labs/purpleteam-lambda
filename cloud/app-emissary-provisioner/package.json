@@ -1,7 +1,7 @@
 {
-  "name": "app-slave-provisioner",
+  "name": "app-emissary-provisioner",
   "version": "0.1.0-alpha.1",
-  "description": "purpleteam app-slave provisioner for cloud environment",
+  "description": "purpleteam app-emissary provisioner for cloud environment",
   "main": "index.js",
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Starts the test slaves.
+Description: Starts the test emissaries.
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -13,11 +13,11 @@ Globals:
 
 Resources:
 
-  provisionAppSlaves:
+  provisionAppEmissaries:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: local/app-slave-provisioner
-      Handler: index.provisionAppSlaves
+      CodeUri: local/app-emissary-provisioner
+      Handler: index.provisionAppEmissaries
       Runtime: nodejs12.x
 
   provisionSeleniumStandalones:
@@ -36,13 +36,13 @@ Resources:
 
 Outputs:
 
-  provisionAppSlaves:
-    Description: "Provision App Slaves Lambda Function ARN"
-    Value: !GetAtt provisionAppSlaves.Arn
+  provisionAppEmissaries:
+    Description: "Provision App Emissaries Lambda Function ARN"
+    Value: !GetAtt provisionAppEmissaries.Arn
 
-  provisionAppSlavesIamRole:
-    Description: "Implicit IAM Role created for Provision App Slaves function"
-    Value: !GetAtt provisionAppSlavesRole.Arn
+  provisionAppEmissariesIamRole:
+    Description: "Implicit IAM Role created for Provision App Emissaries function"
+    Value: !GetAtt provisionAppEmissariesRole.Arn
 
   provisionSeleniumStandalones:
     Description: "Provision Selenium Standalones Lambda Function ARN"

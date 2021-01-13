@@ -12,16 +12,16 @@
     "deps": "npm-check",
     "update:deps": "npm-check -u",
     "//": " --- Cloud Build --- ",
-    "cloud:reinstall": "cd cloud/app-slave-provisioner/ && rm -rf node_modules/ && npm install",
+    "cloud:reinstall": "cd cloud/app-emissary-provisioner/ && rm -rf node_modules/ && npm install",
     "mkCloudDistDir": "mkdir -p cloudDist",
     "//": " --- Cloud Build - S2 Containers Up --- ",
-    "build:appSlaveProvisionerPackage": "npm run mkCloudDistDir && cd cloud/app-slave-provisioner/ && zip -r ../../cloudDist/app-slave-provisioner.zip . -x out.txt",
-    "build:serverSlaveProvisionerPackage": "npm run mkCloudDistDir ",
-    "build:tlsSlaveProvisionerPackage": "npm run mkCloudDistDir ",
-    "build:slaveProvisionerDeploymentPackages": "npm run build:appSlaveProvisionerPackage && npm run build:serverSlaveProvisionerPackage && npm run build:tlsSlaveProvisionerPackage",
+    "build:appEmissaryProvisionerPackage": "npm run mkCloudDistDir && cd cloud/app-emissary-provisioner/ && zip -r ../../cloudDist/app-emissary-provisioner.zip . -x out.txt",
+    "build:serverEmissaryProvisionerPackage": "npm run mkCloudDistDir ",
+    "build:tlsEmissaryProvisionerPackage": "npm run mkCloudDistDir ",
+    "build:emissaryProvisionerDeploymentPackages": "npm run build:appEmissaryProvisionerPackage && npm run build:serverEmissaryProvisionerPackage && npm run build:tlsEmissaryProvisionerPackage",
     "//": " --- Cloud Build - S2 Containers Down --- ",
     "build:s2DeprovisionerPackage": "npm run mkCloudDistDir && cd cloud/s2-deprovisioner/ && zip -r ../../cloudDist/s2-deprovisioner.zip . -x out.txt",
-    "build:slaveDeprovisionerDeploymentPackage": "npm run build:s2DeprovisionerPackage"
+    "build:emissaryDeprovisionerDeploymentPackage": "npm run build:s2DeprovisionerPackage"
   },
   "pre-commit": [
     "lint"

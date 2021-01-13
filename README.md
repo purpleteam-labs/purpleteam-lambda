@@ -23,9 +23,9 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
     <tr>
       <td>Top Level</td>
       <td>selenium<br>provisioner</td>
-      <td>app-slave<br>provisioner</td>
+      <td>app-emissary<br>provisioner</td>
       <td>s2<br>deprovisioner</td>
-      <td>app-slave<br>provisioner</td>
+      <td>app-emissary<br>provisioner</td>
       <td>s2<br>deprovisioner</td>
     </tr>
     <tr>
@@ -36,13 +36,13 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
         <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/selenium-standalone-provisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/selenium-standalone-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/selenium-standalone-provisioner/package.json" style="max-width:100%;"></a>
       </td>
       <td style="width:16.66%;">
-        <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-slave-provisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/app-slave-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-slave-provisioner/package.json" style="max-width:100%;"></a>
+        <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-emissary-provisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/app-emissary-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/app-emissary-provisioner/package.json" style="max-width:100%;"></a>
       </td>
       <td style="width:16.66%;">
         <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/s2-deprovisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/local/s2-deprovisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/local/s2-deprovisioner/package.json" style="max-width:100%;"></a>
       </td>
       <td style="width:16.66%;">
-        <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/cloud/app-slave-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-slave-provisioner/package.json" style="max-width:100%;"></a>
+        <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-emissary-provisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/cloud/app-emissary-provisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/app-emissary-provisioner/package.json" style="max-width:100%;"></a>
       </td>
       <td style="width:16.66%;">
         <a href="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/s2-deprovisioner/package.json"><img src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda/badge.svg?targetFile=/cloud/s2-deprovisioner/package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/purpleteam-labs/purpleteam-lambda?targetFile=/cloud/s2-deprovisioner/package.json" style="max-width:100%;"></a>
