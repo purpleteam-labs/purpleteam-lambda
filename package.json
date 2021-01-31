@@ -1,6 +1,6 @@
 {
   "name": "purpleteam-lambda",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.0",
   "description": "Lambda functions of purpleteam -- security regression testing SaaS",
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",
