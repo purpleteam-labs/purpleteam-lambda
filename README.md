@@ -58,7 +58,20 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
 </div>
 
 
+If you are setting up the lambda functions, you will be targeting the `local` environment.
+
 Clone this repository.
+
+`cd` to the repository root directory and run:  
+```shell
+npm install
+```
+
+Now carry out the same `npm install` command from each of the following directories:
+
+* `local/app-emissary-provisioner/`
+* `local/s2-deprovisioner/`
+* `local/selenium-standalone-provisioner/`
 
 # Install aws cli
 
@@ -90,3 +103,8 @@ brew install aws-sam-cli
 
 In order to validate SAM templates, [you'll need](https://github.com/awslabs/aws-sam-cli/issues/394) an AWS user with CLI access and policy `AWSQuickSightListIAM` added to the group of the CLI user, then, usually the easiest way to do this is to run [`aws configure`](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) which will create two files ([`~/.aws/credentials`](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-credentials-shared.html) & `~/.aws/config`) if they don't already exist. The `aws_access_key_id` & `aws_secret_access_key` will be created in the `credentials` file if they don't exist, and the `output` & [`region`](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-region.html) will be created in the `config` file if they don't exist. If you don't set the region you'll end up with [errors](https://github.com/awslabs/aws-sam-cli/issues/442)  
 Next it's a good idea to make sure these files are `chmod 600` (by default mine was). I then `chmod 700` on `~/.aws/`, just like the `~/.ssh/` directory is.
+
+<br>
+
+Once you have cloned, installed and configured the lambda functions, head back to the [local setup](https://doc.purpleteam-labs.com/local/local-setup.html) documentation to continue setting up the other purpleteam components.
+
