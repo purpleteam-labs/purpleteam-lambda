@@ -81,7 +81,12 @@ Or with a handful of commands you can install the latest, details [here](https:/
 
 # Install aws-sam-cli
 
-The [install details](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) for Linux can be found [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html).  
+The [install details](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) for Linux can be found [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html).
+
+There is two install options, the older one which uses Homebrew and the newer one (which we recommend) which uses a shell script.
+
+## [Homebrew](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-install-linux-alt.html)
+
 You will need to install brew first. Once you have done that `which brew` will show you were it is installed.  
 Contrary to the install instructions, it was installed to: `/home/linuxbrew/.linuxbrew/Homebrew/bin/brew`  
 For us we use zsh, so adding homebrew to our path was just adding the following line to our ~/.zshrc file:  
@@ -98,6 +103,10 @@ For us we had to run the install twice
 brew tap aws/tap
 brew install aws-sam-cli
 ```
+
+## [Shell](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html)
+
+Just follow the directions.
 
 # Configuring aws cli
 
