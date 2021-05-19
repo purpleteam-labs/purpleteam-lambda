@@ -16,7 +16,7 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
   <img src="https://img.shields.io/github/v/release/purpleteam-labs/purpleteam-lambda?color=%23794fb8&include_prereleases" alt="GitHub release (latest SemVer including pre-releases)">
 </a>
 
-<table>
+<!--<table>
   <tbody>
     <tr>
       <td colspan="1"></td>
@@ -52,7 +52,7 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
       </td>
     </tr>
   </tbody>
-</table>
+</table>-->
 
 <br/><br/>
 </div>
