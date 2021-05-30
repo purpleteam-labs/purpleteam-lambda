@@ -12,9 +12,6 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
 <a href="https://www.gnu.org/licenses/agpl-3.0" title="license">
   <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="GNU AGPL">
 </a>
-<a href="https://github.com/purpleteam-labs/purpleteam-lambda/releases" title="latest release">
-  <img src="https://img.shields.io/github/v/release/purpleteam-labs/purpleteam-lambda?color=%23794fb8&include_prereleases" alt="GitHub release (latest SemVer including pre-releases)">
-</a>
 
 <!--<table>
   <tbody>
