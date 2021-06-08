@@ -37,8 +37,11 @@
   },
   "homepage": "https://purpleteam-labs.com",
   "files": [
-    "cloud",
-    "cloudDist",
-    "local"
+    "template.yaml",
+    "cloud/app-emissary-provisioner/index.js",
+    "cloud/s2-deprovisioner/index.js",
+    "local/app-emissary-provisioner/index.js",
+    "local/s2-deprovisioner/index.js",
+    "local/selenium-standalone-provisioner/index.js"
   ]
 }
