@@ -15,5 +15,6 @@
   },
   "devDependencies": {
     "npm-check": "^5.9.2"
-  }
+  },
+  "files": []
 }

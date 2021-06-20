@@ -6,12 +6,15 @@
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",
   "license": "AGPL-3.0-only",
-  "dependencies": {},
+  "dependencies": {
+    "@aws-sdk/client-ecs": "^3.18.0"
+  },
   "scripts": {
     "deps": "npm-check",
     "update:deps": "npm-check -u"
   },
   "devDependencies": {
     "npm-check": "^5.9.2"
-  }
+  },
+  "files": []
 }

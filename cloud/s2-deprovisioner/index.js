@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with purpleteam. If not, see <https://www.gnu.org/licenses/>.
 
-// Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ECS.html
-const ECS = require('aws-sdk/clients/ecs'); // eslint-disable-line import/no-unresolved
+// Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/index.html
+const { ECSClient, DeleteServiceCommand } = require('@aws-sdk/client-ecs');
 
 const internals = {};
 
@@ -69,16 +69,11 @@ internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) =
 
 internals.downContainers = async (ecsServiceNames, { clientContext: { Custom: { /* customer, */ customerClusterArn } } }) => {
   const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
-  const ecs = new ECS({ region: process.env.AWS_REGION });
-
-  const promisedResponses = ecsServiceNames.map((sN) => ecs.deleteService({
-    cluster: customerClusterArn,
-    service: sN,
-    force: true
-  }).promise());
+  const ecsClient = new ECSClient({ region: process.env.AWS_REGION });
+  const deleteServiceCommands = ecsServiceNames.map((sN) => new DeleteServiceCommand({ cluster: customerClusterArn, service: sN, force: true }));
+  const promisedResponses = deleteServiceCommands.map((c) => ecsClient.send(c));
   const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
-
-  console.info(`These are the values returned from ecs.deleteService: ${JSON.stringify(resolved)}`);
+  console.info(`These are the values returned from the ECS deleteServiceCommand: ${JSON.stringify(resolved)}`);
 
   return resolved.every((e) => !!e)
     ? { item: `Stage Two ECS services (${JSON.stringify(ecsServiceNames)}) have been brought down.` }

@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with purpleteam. If not, see <https://www.gnu.org/licenses/>.
 
-// Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ECS.html
-const ECS = require('aws-sdk/clients/ecs'); // eslint-disable-line import/no-unresolved
+// Doc: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/index.html
+const { ECSClient, CreateServiceCommand } = require('@aws-sdk/client-ecs');
 
 const internals = {};
 
@@ -90,7 +90,7 @@ internals.deployEmissaries = async (dTOItems, {
 
   if (dTOItems.length < 1 || dTOItems.length > 12) throw new Error(`The number of items requested was: ${dTOItems.length}. The supported number of Test Sessions is from 1-12 inclusive.`);
 
-  const ecs = new ECS({ region: process.env.AWS_REGION });
+  const ecsClient = new ECSClient({ region: process.env.AWS_REGION });
 
   const browserCounts = dTOItems.map((cV) => cV.browser).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = 1 + (accumulator[currentValue] || 0);
@@ -133,7 +133,7 @@ internals.deployEmissaries = async (dTOItems, {
   const splitItemsWithExtras = [...appItemsWithExtras, ...seleniumItemsWithExtras];
   console.info(`The value of splitItemsWithExtras is: ${JSON.stringify(splitItemsWithExtras)}`);
 
-  const promisedResponses = splitItemsWithExtras.map((cV) => ecs.createService({
+  const createServiceCommands = splitItemsWithExtras.map((cV) => new CreateServiceCommand({
     cluster: customerClusterArn,
     serviceName: cV.ecsServiceName,
     taskDefinition: cV.taskDefinition,
@@ -145,10 +145,12 @@ internals.deployEmissaries = async (dTOItems, {
       // port: 'NUMBER_VALUE',
       registryArn: cV.serviceDiscoveryServiceArn
     }]
-  }).promise());
+  }));
+  const promisedResponses = createServiceCommands.map((c) => ecsClient.send(c));
+
   try {
     const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
-    console.info(`The data objects returned from calling ecs.createService were: ${JSON.stringify(resolved)}`);
+    console.info(`The data objects returned from calling ECS createServiceCommand were: ${JSON.stringify(resolved)}`);
     resolved.every((e) => !e) && (result.error = 'Timeout exceeded: App Emissary container(s) took too long to start. Although they timed out, they may have still started.');
   } catch (e) {
     console.error('Exception occurred, details follow:');
