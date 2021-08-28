@@ -6,7 +6,7 @@
   <br/>
 <br/>
 <h2>purpleteam lambda functions</h2><br/>
-lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">purpleteam</a> - Currently in alpha
+lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam"><em>PurpleTeam</em></a> - Currently in alpha
 <br/><br/>
 
 <a href="https://www.gnu.org/licenses/agpl-3.0" title="license">
@@ -57,7 +57,7 @@ lambda functions of <a href="https://purpleteam-labs.com/" title="purpleteam">pu
 
 If you are setting up the lambda functions, you will be targeting the `local` environment.
 
-Clone this repository.
+Clone or fork this repository.
 
 `cd` to the repository root directory and run:  
 ```shell
@@ -112,5 +112,4 @@ Next it's a good idea to make sure these files are `chmod 600` (by default mine 
 
 <br>
 
-Once you have cloned, installed and configured the lambda functions, head back to the [local setup](https://doc.purpleteam-labs.com/local/local-setup.html) documentation to continue setting up the other purpleteam components.
-
+Once you have worked through the above steps, head back to the [local setup](https://purpleteam-labs.com/doc/local/set-up/) documentation to continue setting up the other _PurpleTeam_ components.
