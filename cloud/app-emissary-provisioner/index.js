@@ -106,11 +106,11 @@ internals.deployEmissaries = async (dTOItems, {
     const browserNumber = numberOfBrowsersToAdd[itemClone.browser] - (runningCountOfBrowsersLeftToAdd[itemClone.browser] - 1);
     runningCountOfBrowsersLeftToAdd[itemClone.browser] -= 1;
     itemClone.appEmissaryContainerName = `appemissary-zap-${itemClone.browser}-${browserNumber}`;
-    itemClone.appEmissaryTaskDefinition = `s2_app_emissary_zap_${itemClone.browser}_${browserNumber}`;
+    itemClone.appEmissaryTaskDefinition = `s2_app_emissary_zap_${itemClone.browser}_${browserNumber}_${customer}`;
     itemClone.appEcsServiceName = `s2_app_emissary_zap_${itemClone.browser}_${browserNumber}_${customer}`;
     itemClone.appServiceDiscoveryServiceArn = `${serviceDiscoveryServiceArnPrefix}${serviceDiscoveryServices[`s2_app_emissary_zap_${itemClone.browser}_${browserNumber}`]}`;
     itemClone.seleniumContainerName = `seleniumstandalone-${itemClone.browser}-${browserNumber}`;
-    itemClone.seleniumTaskDefinition = `s2_app_emissary_selenium_${itemClone.browser}_${browserNumber}`;
+    itemClone.seleniumTaskDefinition = `s2_app_emissary_selenium_${itemClone.browser}_${browserNumber}_${customer}`;
     itemClone.seleniumEcsServiceName = `s2_app_emissary_selenium_${itemClone.browser}_${browserNumber}_${customer}`;
     itemClone.seleniumServiceDiscoveryServiceArn = `${serviceDiscoveryServiceArnPrefix}${serviceDiscoveryServices[`s2_app_emissary_selenium_${itemClone.browser}_${browserNumber}`]}`;
     return itemClone;
