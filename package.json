@@ -20,6 +20,7 @@
     "build:emissaryProvisionerDeploymentPackages": "npm run build:appEmissaryProvisionerPackage && npm run build:serverEmissaryProvisionerPackage && npm run build:tlsEmissaryProvisionerPackage",
     "build:s2DeprovisionerPackage": "npm run mkCloudDistDir && cd cloud/s2-deprovisioner/ && zip -r ../../cloudDist/s2-deprovisioner.zip . -x out.txt",
     "build:emissaryDeprovisionerDeploymentPackage": "npm run build:s2DeprovisionerPackage",
+    "build:s2EcsServiceDeletion": "npm run mkCloudDistDir && cd cloud/s2-ecs-service-deletion/ && zip -r ../../cloudDist/s2-ecs-service-deletion.zip . -x out.txt",
     "prepare": "husky install"
   },
   "pre-commit": [

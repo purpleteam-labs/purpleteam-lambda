@@ -2,6 +2,7 @@
 .git/
 cloud/app-emissary-provisioner/node_modules/
 cloud/s2-deprovisioner/node_modules/
+cloud/s2-ecs-service-deletion/node_modules/
 local/app-emissary-provisioner/node_modules/
 local/selenium-standalone-provisioner/node_modules/
 local/s2-deprovisioner/node_modules/

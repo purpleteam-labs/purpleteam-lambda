@@ -1,0 +1,21 @@
+{
+  "name": "s2-ecs-service-deletion",
+  "version": "0.0.0-alpha.1",
+  "description": "Run by EventBridge (AKA CloudWatch) via ECS Task state change events to delete dangling S2 ECS Services",
+  "main": "index.js",
+  "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
+  "author": "Kim Carter",
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "@aws-sdk/client-ecs": "^3.18.0",
+    "got": "^11.8.2"
+  },
+  "scripts": {
+    "deps": "npm-check",
+    "update:deps": "npm-check -u"
+  },
+  "devDependencies": {
+    "npm-check": "^5.9.2"
+  },
+  "files": []
+}

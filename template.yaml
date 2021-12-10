@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Starts the test emissaries.
+Description: Starts, stops, deletes the test emissaries.
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 10 # !Ref LAMBDA_TIMEOUT # Default is 3 seconds # !Ref doesn't work here, so we have to duplicate the value.
+    Timeout: 10 # !Ref LAMBDA_TIMEOUT # Default is 3 seconds # !Ref doesn't work here, so we have to duplicate the value. The actual value used is in the Terraform module.
     Environment:
       Variables: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         NODE_ENV: 
