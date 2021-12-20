@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",
-  "license": "AGPL-3.0-only",
+  "license": "BSL",
   "dependencies": {
     "@aws-sdk/client-ecs": "^3.18.0",
     "got": "^11.8.2"

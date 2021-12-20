@@ -4,7 +4,7 @@
   "description": "Lambda functions of purpleteam -- security regression testing SaaS",
   "repository": "https://github.com/purpleteam-labs/purpleteam-lambda",
   "author": "Kim Carter",
-  "license": "AGPL-3.0-only",
+  "license": "BSL",
   "dependencies": {},
   "scripts": {
     "// eslint warning": "Make sure to add new Lambda function node_modules dirs to .eslintignore",
@@ -43,6 +43,8 @@
     "cloud/s2-deprovisioner/index.js",
     "local/app-emissary-provisioner/index.js",
     "local/s2-deprovisioner/index.js",
-    "local/selenium-standalone-provisioner/index.js"
+    "local/selenium-standalone-provisioner/index.js",
+    "LEGALNOTICE.md",
+    "licenses"
   ]
 }
