@@ -7,7 +7,7 @@
   "author": "Kim Carter",
   "license": "BSL",
   "dependencies": {
-    "@aws-sdk/client-ecs": "^3.18.0"
+    "@aws-sdk/client-ecs": "^3.51.0"
   },
   "scripts": {
     "deps": "npm-check",
