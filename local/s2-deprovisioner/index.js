@@ -7,7 +7,41 @@
 // the Business Source License, use of this software will be governed
 // by the Apache License, Version 2.0
 
-const axios = require('axios');
+const k8s = require('@kubernetes/client-node');
+const fs = require('fs');
+const yaml = require('js-yaml');
+const util = require('util');
+
+/**
+ * the equivalent of kubectl delete -f .yaml
+ * @param {*} specPath
+ * @returns Array of deleted resources
+ */
+async function kubeDelete(deploymentName) {
+  const specPath = `../prod/purpleteam-s2-containers/${deploymentName}/deployment.yaml`;
+  const kc = new k8s.KubeConfig();
+  kc.loadFromDefault();
+  const client = k8s.KubernetesObjectApi.makeApiClient(kc);
+  const fsReadFileP = util.promisify(fs.readFile);
+  const specString = await fsReadFileP(specPath, 'utf8');
+  const specs = yaml.loadAll(specString);
+  const validSpecs = specs.filter((s) => s && s.kind && s.metadata);
+  const deleted = [];
+  validSpecs.forEach(async (doc) => {
+    const spec = doc;
+    spec.metadata.annotations = spec.metadata.annotations || {};
+    delete spec.metadata.annotations['kubectl.kubernetes.io/last-applied-configuration'];
+    try {
+      await client.read(spec);
+      const response = await client.delete(spec);
+      deleted.push(response.body);
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  return deleted;
+}
+
 
 const internals = {};
 
@@ -59,12 +93,11 @@ internals.promiseAllTimeout = async (promises, timeout, resolvePartial = true) =
 }));
 
 
-internals.downContainers = async (containerNames) => {
+internals.downContainers = async (deploymentNames) => {
   const { promiseAllTimeout, s2ProvisioningTimeout } = internals;
-  const http = axios.create({ /* default is 0 (no timeout) */ baseURL: 'http://docker-compose-ui:5000/api/v1', headers: { 'Content-type': 'application/json' } });
-  const s2ProjectNames = [...containerNames];
+  const s2ProjectNames = [...deploymentNames];
 
-  const promisedResponses = s2ProjectNames.map((pN) => http.post('/down', { id: pN }));
+  const promisedResponses = s2ProjectNames.map((pN) => kubeDelete(pN));
   const resolved = await promiseAllTimeout(promisedResponses, s2ProvisioningTimeout);
 
   return resolved.every((e) => !!e)
@@ -74,10 +107,10 @@ internals.downContainers = async (containerNames) => {
 
 exports.deprovisionS2Containers = async (event, context) => { // eslint-disable-line no-unused-vars
   internals.s2ProvisioningTimeout = process.env.S2_PROVISIONING_TIMEOUT * 1000;
-  const { deprovisionViaLambdaDto: { items: containerNames } } = event;
+  const { deprovisionViaLambdaDto: { items: deploymentNames } } = event;
   const { downContainers, printEnv } = internals;
   printEnv();
-  const result = await downContainers(containerNames);
+  const result = await downContainers(deploymentNames);
 
   const response = {
     // 'statusCode': 200,

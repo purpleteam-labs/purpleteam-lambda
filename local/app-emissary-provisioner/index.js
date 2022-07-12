@@ -53,6 +53,8 @@ async function kubeApply(specPath = '../prod/purpleteam-s2-containers/app-emissa
       created.push(response.body);
     }
   });
+
+  return created
 }
 
 
